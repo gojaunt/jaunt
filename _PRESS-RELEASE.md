@@ -1,5 +1,5 @@
 # Project Name #
-
+VictoriousCemetery
 <!-- 
 > This material was originally posted [here](http://www.quora.com/What-is-Amazons-approach-to-product-development-and-product-management). It is reproduced here for posterities sake.
 
@@ -18,27 +18,36 @@ Once the project moves into development, the press release can be used as a touc
  
 ## Heading ##
   > Name the product in a way the reader (i.e. your target customers) will understand.
+  Jaunt (gojaunt.co)
 
 ## Sub-Heading ##
   > Describe who the market for the product is and what benefit they get. One sentence only underneath the title.
+  Jaunt let's local explorers find walking adventures that fit their fancy.
 
 ## Summary ##
   > Give a summary of the product and the benefit. Assume the reader will not read anything else so make this paragraph good.
+  Jaunt is a local search app for custom walking itinerary's ("jaunts") throughout a city.  You can search for jaunts based on location, time commitment, experience and other contextual data as well as create and share your own custom jaunts.  Jaunt helps solve the age old question of "what should I do today" by providing you with a simple and fun way to discover the local treasures of your city. 
 
 ## Problem ##
   > Describe the problem your product solves.
+  Jaunt helps solve the age old question of "what should I do today?"
 
 ## Solution ##
   > Describe how your product elegantly solves the problem.
+  Jaunt organizes relevant location-based data into a fun and custom walking itinerary.
 
 ## Quote from You ##
   > A quote from a spokesperson in your company.
+  - "We built Jaunt to solve the age old question of, 'what should you I today?''  So what are you going to do today?  Take a Jaunt."
 
 ## How to Get Started ##
   > Describe how easy it is to get started.
+  Download the app at gojaunt.co and select you first Jaunt!
 
 ## Customer Quote ##
   > Provide a quote from a hypothetical customer that describes how they experienced the benefit.
+  "I went from no plans on Saturday to a full adventure with one click.  Jaunt helped me discover just how much fun my city can be!"
 
 ## Closing and Call to Action ##
   > Wrap it up and give pointers where the reader should go next.
+  So what are you waiting for?  Go to gojaunt.co, download the app and get on your first Jaunt!
