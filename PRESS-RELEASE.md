@@ -1,5 +1,5 @@
-# Project Name #
-VictoriousCemetery
+# Jaunt #
+formerly know ans Victorious Cemetery, aka Victoria's Cemetery
 <!-- 
 > This material was originally posted [here](http://www.quora.com/What-is-Amazons-approach-to-product-development-and-product-management). It is reproduced here for posterities sake.
 
@@ -17,9 +17,6 @@ Once the project moves into development, the press release can be used as a touc
  -->
  
 ## Jaunt (gojaunt.co) ##
-
-
-## Sub-Heading ##
   > Jaunt let's local explorers find walking adventures that fit their fancy.
 
 ## Summary ##
