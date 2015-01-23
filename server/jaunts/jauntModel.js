@@ -6,8 +6,5 @@ var JauntSchema = new mongoose.Schema({
 });
 
 
-JauntSchema.pre('save', function(next){
-  next();
-});
 
 module.exports = mongoose.model('Jaunt', JauntSchema);
