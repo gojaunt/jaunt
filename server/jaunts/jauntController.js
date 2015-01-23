@@ -7,6 +7,8 @@ module.exports = {
   fetchJaunts: function (req, res, next) {
 	var findAll = Q.nbind(Jaunt.find, Jaunt);
 
+
+
 	findAll({})
 	  .then(function (jaunts) {
 	    res.json(jaunts);
