@@ -10,4 +10,9 @@ Jaunt is built locally using gulp.
 ## Remote Deployment
 
 Jaunt is deployed on Heroku at [gojaunt.herokuapp.com](https://gojaunt.herokuapp.com/).
-To begin deployment to Heroku, [Heroku toolkit](https://toolbelt.heroku.com/) must first be installed.
+To begin deployment to Heroku, [Heroku toolkit](https://toolbelt.heroku.com/) must first be installed. Login to heroku using:
+
+```sh
+heroku login
+```
+
