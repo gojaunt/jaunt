@@ -1,12 +1,12 @@
-# Project Name
+# Jaunt
 
-> Pithy project description
+> Jaunt let's local explorers find walking adventures that fit their fancy.
 
 ## Team
 
-  - __Product Owner__: teamMember
-  - __Scrum Master__: teamMember
-  - __Development Team Members__: teamMember, teamMember
+  - __Product Owner__: [Kiran Rao](https://github.com/kranrao) 
+  - __Scrum Master__: [Andy Coenen](https://github.com/cannoneyed)
+  - __Development Team Members__: [Zachary Lopez](https://github.com/zdlopez), [Benoy Maniara](https://github.com/maniarab)
 
 ## Table of Contents
 
