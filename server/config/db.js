@@ -11,7 +11,7 @@ module.exports.options = { server: { socketOptions: { keepAlive: 1, connectTimeo
 //Determines the mongo db url to connect to depending on the development environment
 var env = process.env.NODE_ENV || 'localTest';
 if (env === 'production' || env === 'localTest') {
-  var mongodbUrl = process.env.MONGOLAB_URL + '/jaunt';
+  var mongodbUrl = process.env.MONGOLAB_URI + '/jaunt';
 } else {
   var mongodbUrl = 'mongodb://localhost/jaunt';
 }
