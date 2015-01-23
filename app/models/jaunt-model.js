@@ -90,7 +90,6 @@ var JauntSchema = new db.Schema({
       description : String,
       photoUrl: String,
       tags : [String],
-      context : String,
       time: Number,
       API : String
     }
@@ -297,7 +296,6 @@ var myJaunt = new Jaunt(
         description : "get the burger",
         photoUrl: "somePhotoUrl",
         tags : ["Drinking", "Food"],
-        context : "Bars on a Sunday",
         time: 60,
         API : "Some API String"
       },
@@ -306,7 +304,6 @@ var myJaunt = new Jaunt(
         description : "get your dance on",
         photoUrl: "somePhotoUrl",
         tags : ["Drinking", "Dancing"],
-        context : "partying",
         time : 120,
         API : "Some API String"
       }
