@@ -1,5 +1,8 @@
 ### node etc ###
 
+#environment variables (api keys, etc)
+.env
+
 # Logs
 logs
 *.log
