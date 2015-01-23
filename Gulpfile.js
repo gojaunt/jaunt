@@ -37,7 +37,7 @@ gulp.task('karma', shell.task([
 
 // start our node server using foreman
 gulp.task('serve', shell.task([
-  'foreman run web'
+  'foreman run local'
 ]));
 
 gulp.task('default', ['start']);
