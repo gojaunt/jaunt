@@ -40,4 +40,11 @@ gulp.task('serve', shell.task([
   'foreman run local'
 ]));
 
+gulp.task('install', shell.task([
+  'npm install',
+  'bower install'
+]));
+
 gulp.task('default', ['start']);
+
+gulp.task('deploy', ['start']);
