@@ -1,0 +1,44 @@
+<!--
+  This template loads for the 'tab.jaunt-detail' state (app.js)
+  'jaunt' is a $scope variable created in the JauntsCtrl controller (controllers.js)
+  The JauntsCtrl pulls data from the Jaunts service (service.js)
+  The Jaunts service returns an array of jaunt data
+-->
+
+<ion-view view-title="{{jaunt.name}}">
+  <ion-content>
+    <div class="list card">
+
+      <div class="item item-avatar">
+        <img ng-src="{{jaunt.face}}">
+        <h2>{{jaunt.name}}</h2>
+        <p>
+          <a href="#" class="subdued">{{jaunt.rating}}</a>
+          <a href="#" class="subdued" ng-repeat="tag in tags">{{tag}}</a>
+        </p>
+      </div>
+
+      <div class="item item-body">
+        <!-- Note: perhaps a place to include the map? -->
+        <img class="full-image" ng-src="{{jaunt.face}}">
+        <p>
+          {{jaunt.description}}
+        </p>
+      </div>
+
+      <div class="list">
+        <ion-list>
+          <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="place in places" type="item-text-wrap" href="#/tab/jaunts/{{jaunt.id}}/{{place.id}}">
+            <img ng-src="{{place.face}}">
+            <h2>{{place.name}}</h2>
+            <p>{{place.description}}</p>
+            <i class="icon ion-chevron-right icon-accessory"></i>
+          </ion-item>
+        </ion-list>
+      </div>
+
+    </div>
+    
+  </ion-content>
+
+</ion-view>
