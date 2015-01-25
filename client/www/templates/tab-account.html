@@ -1,7 +1,15 @@
-<!-- Contains user account or profile information -->
-
-<ion-view view-title="Search">
+<ion-view view-title="Account">
   <ion-content>
-    <h1>ACCOUNT TO COME</h1>
+    <ion-list>
+      <ion-item class="item-toggle">
+        Enable Friends
+        <label class="toggle">
+          <input type="checkbox" ng-model="settings.enableFriends">
+          <div class="track">
+            <div class="handle"></div>
+          </div>
+        </label>
+      </ion-item>
+    </ion-list>
   </ion-content>
 </ion-view>

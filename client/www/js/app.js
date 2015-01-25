@@ -1,4 +1,11 @@
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.directives'])
+// Ionic Starter App
+
+// angular.module is a global place for creating, registering and retrieving Angular modules
+// 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
+// the 2nd parameter is an array of 'requires'
+// 'starter.services' is found in services.js
+// 'starter.controllers' is found in controllers.js
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.directives', 'starter.services'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -25,16 +32,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.directives']
 
   // Each tab has its own nav history stack:
 
-  .state('tab.search', {
-    url: '/search',
-    views: {
-      'tab-search': {
-        templateUrl: 'templates/tab-search.html',
-        controller: 'SearchCtrl'
-      }
-    }
-  })
-
   .state('tab.map', {
     url: '/map',
     views: {
@@ -45,15 +42,33 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.directives']
     }
   })
 
-  .state('tab.jaunt', {
-    url: '/jaunt',
-    views: {
-      'tab-jaunt': {
-        templateUrl: 'templates/tab-jaunt-detail.html',
-        controller: 'JauntCtrl'
+  .state('tab.jaunts', {
+      url: '/jaunts',
+      views: {
+        'tab-jaunts': {
+          templateUrl: 'templates/tab-jaunts.html',
+          controller: 'JauntsCtrl'
+        }
       }
-    }
-  })
+    })
+    .state('tab.jaunt-detail', {
+        url: '/jaunts/:jauntId',
+        views: {
+          'tab-jaunts': {
+            templateUrl: 'templates/jaunt-detail.html',
+            controller: 'JauntDetailCtrl'
+          }
+        }
+      })
+      .state('tab.place-detail', {
+        url: '/jaunts/:jauntId/:placeId',
+        views: {
+          'tab-jaunts': {
+            templateUrl: 'templates/place-detail.html',
+            controller: 'PlaceDetailCtrl'
+          }
+        }
+      })
 
   .state('tab.account', {
     url: '/account',
@@ -66,6 +81,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.directives']
   });
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/search');
+  $urlRouterProvider.otherwise('/tab/map');
 
-})
+});
