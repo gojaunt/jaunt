@@ -33,8 +33,7 @@
 Use github’s interface to make a fork of the repo, then add that repo as an upstream remote:
 
 ```
-git remote add upstream https://github.com/hackreactor-labs/<NAME_OF_REPO>.git
-```
+git remote add upstream https://github.com/gojaunt/jaunt.git
 
 ### Cut a namespaced feature branch from master
 
@@ -48,7 +47,6 @@ Your branch should follow this naming convention:
 These commands will help you do this:
 
 ``` bash
-
 # Creates your branch and brings you there
 git checkout -b `your-branch-name`
 ```
@@ -103,7 +101,7 @@ and picking the versions you want. Be aware that these changes will show
 up in your pull request, so try and incorporate upstream changes as much
 as possible.
 
-You pick a file by `git add`ing it - you do not make commits during a
+You pick a file by `git add`ing or `git rm`ing it - you do not make commits during a
 rebase.
 
 Once you are done fixing conflicts for a specific commit, run:
@@ -119,6 +117,47 @@ make sure they work also.
 
 If rebasing broke anything, fix it, then repeat the above process until
 you get here again and nothing is broken and all the tests pass.
+
+### Flatten your commits
+
+Now we flatten all commits on the feature branch into one single large commit for the upcoming pull request. First, identify the hash of the commit at the top of upstream/master, in this case 95f4a52.  
+
+```bash
+* ba5599a 2015-01-24 | Even more cool stuff (HEAD, feat/coolStuff) 
+* c294daf 2015-01-24 | Some cool new stuff
+* d603a49 2015-01-24 | Sample Commit
+*   95f4a52 2015-01-24 | Merge pull request #27 (upstream/master)
+```
+
+We'll be rebasing to this point - think of it as the base under a stack of commits you'll be squishing together. To do this, use:
+
+```bash
+git rebase -i `hash of (upstream/master)`
+```
+
+This will open up your text editor and show you something like this:
+
+```sh
+pick d603a49 Sample Commit
+pick c294daf Some cool new stuff
+pick ba5599a Even more cool stuff
+```
+
+Change every commit but the first to 'squish' (or 's' for short), winding up with something like this:
+
+```sh
+pick d603a49 Sample Commit
+squish c294daf Some cool new stuff
+squish ba5599a Even more cool stuff
+```
+
+If all goes well, another text editor will open prompting you for a new commit message for the entire 'squashed' commit. Rename it appropriately, and if all goes well you'll have a new history with all recent commits rolled into one, ready for a pull request.
+
+```bash
+* sa92dh2 2015-01-24 | All the commits! (HEAD, feat/coolStuff) 
+*   95f4a52 2015-01-24 | Merge pull request #27 (upstream/master)
+```
+
 
 ### Make a pull request
 
