@@ -1,11 +1,18 @@
 'use strict';
 
-var gulp      = require('gulp'),
-    nodemon   = require('gulp-nodemon'),
-    bs        = require('browser-sync'),
-    reload    = bs.reload,
-    when      = require('gulp-if'),
-    shell     = require('gulp-shell');
+var gulp = require('gulp');
+var browserSync = require('browser-sync');
+var bower = require('bower');
+var sass = require('gulp-sass');
+var minifyCss = require('gulp-minify-css');
+var rename = require('gulp-rename');
+var concat = require('gulp-concat');
+var gutil = require('gulp-util');
+var nodemon = require('gulp-nodemon');
+var reload = browserSync.reload;
+var shell = require('gulp-shell');
+var sh = require('shelljs');
+var when = require('gulp-if');
 
 
 // the paths to our app files
@@ -15,14 +22,29 @@ var paths = {
   html: ['client/app/**/*.html', 'client/index.html'],
   styles: ['client/styles/style.css'],
   server: ['server/**/*.js'],
-  test: ['specs/**/*.js']
+  test: ['specs/**/*.js'],
+  sass: ['client/scss/**/*.scss']
 };
+
+// Compile sass
+gulp.task('sass', function(done) {
+  gulp.src('./client/scss/ionic.app.scss')
+    .pipe(sass())
+    .pipe(gulp.dest('./client/www/css/'))
+    .pipe(sass({sourcemap: true}))
+    .pipe(minifyCss({
+      keepSpecialComments: 0
+    }))
+    .pipe(rename({ extname: '.min.css' }))
+    .pipe(gulp.dest('./client/www/css/'))
+    .pipe(reload({stream:true}));
+});
 
 // any changes made to your
 // client side code will automagically refresh your page
 // with the new changes
-gulp.task('start', ['serve'],function () {
-  bs({
+gulp.task('browser-sync', ['serve'],function () {
+  browserSync({
     notify: true,
     // address for server,
     injectChanges: true,
@@ -30,6 +52,8 @@ gulp.task('start', ['serve'],function () {
     proxy: 'localhost:5000'
   });
 });
+
+
 
 gulp.task('karma', shell.task([
   'karma start'
@@ -45,6 +69,9 @@ gulp.task('install', shell.task([
   'bower install'
 ]));
 
-gulp.task('default', ['start']);
+gulp.task('default', ['sass', 'browser-sync'], function () {
+  gulp.watch("client/scss/*.scss", ['sass']);
+  gulp.watch("*.html", ['bs-reload']);
+});
 
 gulp.task('deploy', ['start']);

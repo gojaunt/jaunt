@@ -22,16 +22,16 @@ module.exports = {
 	var findJaunt = Q.nbind(Jaunt.findOne, Jaunt);
 	var createJaunt = Q.nbind(Jaunt.create, Jaunt);
 
+	res.send('saved!');
+	// var newJaunt = test.jaunt;
 
-	var newJaunt = test.jaunt;
-
-	createJaunt(newJaunt)
-	  .then(function (createdLink) {
-		  res.send("SAVED DER");
-	  })
-    .fail(function (error) {
-      next(error);
-    });
+	// createJaunt(newJaunt)
+	//   .then(function (createdLink) {
+	// 	  res.send("SAVED DER");
+	//   })
+ //    .fail(function (error) {
+ //      next(error);
+ //    });
 	
 	// var url = req.body.url;
 	// console.log(req.body);

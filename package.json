@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "bower": "^1.3.3",
     "browser-sync": "^1.5.7",
     "clone-stats": "0.0.1",
     "expect.js": "^0.3.1",
@@ -18,6 +19,7 @@
     "gulp-karma": "0.0.4",
     "gulp-nodemon": "^1.0.4",
     "gulp-shell": "^0.2.7",
+    "gulp-util": "^2.2.14",
     "jshint-stylish": "^0.2.0",
     "karma": "^0.12.16",
     "karma-chrome-launcher": "^0.1.4",
@@ -28,7 +30,8 @@
     "karma-nyan-reporter": "0.0.43",
     "karma-phantomjs-launcher": "^0.1.4",
     "karma-unicorn-reporter": "^0.1.4",
-    "mocha": "^1.20.1"
+    "mocha": "^1.20.1",
+    "shelljs": "^0.3.0"
   },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
@@ -37,8 +40,12 @@
     "express": "^4.4.5",
     "foreman": "^1.2.1",
     "gulp": "^3.8.10",
+    "gulp-concat": "^2.2.0",
     "gulp-if": "^1.2.5",
+    "gulp-minify-css": "^0.3.0",
     "gulp-nodemon": "^1.0.5",
+    "gulp-rename": "^1.2.0",
+    "gulp-sass": "^0.7.1",
     "gulp-shell": "^0.2.11",
     "jwt-simple": "^0.2.0",
     "mongoose": "^3.8.12",
