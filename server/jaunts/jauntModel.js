@@ -10,6 +10,14 @@ var JauntSchema = new mongoose.Schema({
     commentId : Number,
     tags : [String],
   },
+  distance : {
+     text : String,
+     value : Number
+  },
+  duration : {
+     text : String,
+     value : Number
+  },
   start_location : {
      lat : Number,
      lng : Number
@@ -56,8 +64,10 @@ var JauntSchema = new mongoose.Schema({
       description : String,
       photoUrl: String,
       tags : [String],
-      time: Number,
-      API : String,
+      duration : {
+         text : String,
+         value : String
+      },
       location : {
                  lat : Number,
                  lng : Number
@@ -75,7 +85,7 @@ module.exports = mongoose.model('Jaunt', JauntSchema);
 
 /*  The below is sample data creating and saving a jaunt to the db.
 var myJaunt = new Jaunt(
-
+  
   {  
     meta: {
     title : "my awesome jaunt",
@@ -95,6 +105,14 @@ var myJaunt = new Jaunt(
           lat : 37.7834319,
           lng : -122.4090658
        }
+    },
+    "distance" : {
+       "text" : "900 ft",
+       "value" : 280
+    },
+    "duration" : {
+       "text" : "4 min",
+       "value" : 218
     },
     "steps" : [
        {
