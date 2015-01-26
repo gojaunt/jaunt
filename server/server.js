@@ -13,6 +13,7 @@ require('./config/middleware.js')(app, express);
 module.exports = app;
 
 
+
 /* Walkthrough of the server
 
   Express, mongoose, and our server are initialzed here
