@@ -34,6 +34,7 @@ Use github’s interface to make a fork of the repo, then add that repo as an up
 
 ```
 git remote add upstream https://github.com/gojaunt/jaunt.git
+```
 
 ### Cut a namespaced feature branch from master
 

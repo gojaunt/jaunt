@@ -1,6 +1,6 @@
 # Jaunt
 
-> Jaunt let's local explorers find walking adventures that fit their fancy.
+Jaunt lets local explorers find walking adventures that fit their fancy.
 
 ## Team
 
@@ -8,29 +8,11 @@
   - __Scrum Master__: [Andy Coenen](https://github.com/cannoneyed)
   - __Development Team Members__: [Zachary Lopez](https://github.com/zdlopez), [Benoy Maniara](https://github.com/maniarab)
 
-## Table of Contents
-
-1. [Usage](#Usage)
-1. [Requirements](#requirements)
-1. [Development](#development)
-    1. [Installing Dependencies](#installing-dependencies)
-    1. [Tasks](#tasks)
-1. [Team](#team)
-1. [Contributing](#contributing)
-
-## Usage
-
-> Some usage instructions
-
-## Requirements
-
-- Node 0.10.35
-- MongoDB
-- Deployed on Heroku
-
 ## Development
 
-### Installing Dependencies
+Jaunt server is built using express 4 and uses MongoDB. The client is a mobile-first web application built using Ionic. The project is deployed to Heroku.
+
+### Deployment
 
 From within the root directory:
 
@@ -39,10 +21,15 @@ npm install
 bower install
 ```
 
-### Roadmap
+If you want to connect to the remote mongoDb, create a .env file with the proper environment variables. See [DEPLOYMENT.md](DEPLOYMENT.md) for more info. The server will connect to a local mongoDB server by default.
 
-View the project roadmap [here](LINK_TO_PROJECT_ISSUES)
+Build both the client and server files, and watch for changes, with:
 
+```sh
+gulp
+```
+
+For remote deployment to Heroku, see [DEPLOYMENT.md](DEPLOYMENT.md).
 
 ## Contributing
 
