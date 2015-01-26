@@ -10,6 +10,14 @@ var JauntSchema = new mongoose.Schema({
     commentId : Number,
     tags : [String],
   },
+  start_location : {
+     lat : Number,
+     lng : Number
+  },
+  end_location : {
+     lat : Number,
+     lng : Number
+  },
   bounds : {
      northeast : {
         lat : Number,
@@ -88,7 +96,6 @@ var myJaunt = new Jaunt(
           lng : -122.4090658
        }
     },
-
     "steps" : [
        {
           "distance" : {
