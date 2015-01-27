@@ -24,6 +24,7 @@ build/
 dist/
 app/db/
 client/www/css/
+client/www/lib/
 
 #OS Specific Annoyances
 .DS_Store
