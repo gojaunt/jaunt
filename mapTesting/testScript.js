@@ -1,8 +1,9 @@
 $(function(){
   var points, map, directionService, myOptions;
   var directionsArr = [];
+  var markers = [];
   var path;
-  var jaunt;
+  var jaunt = {};
   var poly;
   var stopClicked = false;
   var firstDataEntered = false;
@@ -15,6 +16,9 @@ $(function(){
   $('#route').click(function(){
     stopClicked = false;
   });
+
+  //create an empty array where jaunt stops can be stored
+  jaunt.stops = [];
 
 function Init() {
   points = [undefined, undefined];
@@ -40,17 +44,20 @@ function Init() {
     points.shift();
     points.push(evt);
 
-    var infowindow = new google.maps.InfoWindow(), marker, i;
+    var infowindow = new google.maps.InfoWindow(), i;
     var latitude = evt.latLng.k;
     var longitude = evt.latLng.D;
 
-    marker = new google.maps.Marker({
-            position: new google.maps.LatLng(latitude, longitude),
-            map: map
-    });
+    var marker = createMarker(latitude, longitude);
+    if(markers.length === 0){
+      marker.isStartLocation = true;
+    }
+    markers.push(marker);
+    deleteNonStopMarkers(markers);
 
+    
     if(points[0] !== undefined){
-      console.log(points);  
+      // console.log(points);  
       var reqObj = createRequestObj(points);
       getDirections(reqObj);
     }
@@ -60,13 +67,48 @@ function Init() {
       var name = prompt("What is the name of the stop?");
       var description = prompt("Please add a description.");
       var photoURL = prompt("Please add a photoURL.");
-      var description = prompt("Please add a description.");
+      var tags = prompt("please add tags");
       var duration = prompt('How long did you stay there?');
+      var stopLocObj = {
+        coordinates: [longitude, latitude]
+      };
+      
       //save the input in the jaunt object
+      var stopObj = {
+        name: name,
+        description: description,
+        photoURL: photoURL,
+        tags: tags,
+        duration: duration,
+        location: stopLocObj
+      };
+      jaunt.stops.push(stopObj);
+      console.log(jaunt);
     }
   });
 }
 
+//creates markers on the map
+var createMarker = function(latitude, longitude) {
+  var marker = new google.maps.Marker({
+                position: new google.maps.LatLng(latitude, longitude),
+                map: map,
+        });
+  if(stopClicked){
+    marker.isAStop = true;
+  }else{
+    marker.isAStop = false;
+  }
+  return marker;
+}
+
+//deletes marker that has a 'isAStop' property of 'false'
+var deleteNonStopMarkers = function(arr) {
+  var lastMarker = arr[arr.length-2];
+  if(arr.length > 2 && !lastMarker.isAStop){
+    lastMarker.setMap(null);
+  }
+}
 // returns a request object that can be used by google maps api
 var createRequestObj = function(arr){
   var reqObj = {
@@ -77,13 +119,9 @@ var createRequestObj = function(arr){
   return reqObj;
 };
 
-
-
 var buildPath = function(result){
-  console.log(result);
   var stepper = result.routes[0].legs[0].steps;
-  if(jaunt === undefined){
-    jaunt = {};
+  if(jaunt.start_location === undefined){
     jaunt.start_location = {};
     jaunt.start_location.lat = stepper[0].start_location.lat();
     jaunt.start_location.lng = stepper[0].start_location.lng();
@@ -114,7 +152,7 @@ var buildPath = function(result){
   jaunt.end_location.lat = stepper[stepper.length-1].end_location.lat();
   jaunt.end_location.lng = stepper[stepper.length-1].end_location.lng();
 
-  console.log('jaunt is ', jaunt);
+  // console.log('jaunt is ', jaunt);
   displayRoute();
 };
 
@@ -124,7 +162,7 @@ var displayRoute = function(){
     linepoints.push(new google.maps.LatLng(jaunt.steps[i].start_location.lat, jaunt.steps[i].start_location.lng));
     linepoints.push(new google.maps.LatLng(jaunt.steps[i].end_location.lat, jaunt.steps[i].end_location.lng));
   }
-  console.log("linepoints is ",linepoints);
+  // console.log("linepoints is ",linepoints);
   poly.setPath(linepoints);
 }
 
