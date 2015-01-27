@@ -1,15 +1,28 @@
 var Jaunt = require('./jauntModel.js');
 var test = require('./test.js');
+var geo = require('../utils/geoUtils.js');
 var Q = require('q');
 
 module.exports = {
 
   fetchJaunts: function (req, res, next) {
-	var findAll = Q.nbind(Jaunt.find, Jaunt);
+	var find = Q.nbind(Jaunt.find, Jaunt);
+	var query = req.query;
+
+	if (query.start_location) {
+		query.start_location.rangeDegrees = geo.metersToDegrees( query.start_location.range );
+	}
+	if (query.end_location) {
+		query.end_location.rangeDegrees = geo.metersToDegrees( query.end_location.range );
+	}
 
 
+	console.log(query);
 
-	findAll({})
+
+	// res.send('queried!');
+
+	find({})
 	  .then(function (jaunts) {
 	    res.json(jaunts);
 	  })
@@ -19,19 +32,17 @@ module.exports = {
   },
 
   newJaunt: function (req, res, next) {
-	var findJaunt = Q.nbind(Jaunt.findOne, Jaunt);
 	var createJaunt = Q.nbind(Jaunt.create, Jaunt);
 
-	res.send('saved!');
-	// var newJaunt = test.jaunt;
+	var newJaunt = test.jaunt;
 
-	// createJaunt(newJaunt)
-	//   .then(function (createdLink) {
-	// 	  res.send("SAVED DER");
-	//   })
- //    .fail(function (error) {
- //      next(error);
- //    });
+	createJaunt(newJaunt)
+	  .then(function (createdLink) {
+		  res.send("SAVED DER");
+	  })
+    .fail(function (error) {
+      next(error);
+    });
 	
 	// var url = req.body.url;
 	// console.log(req.body);
