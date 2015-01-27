@@ -7,8 +7,7 @@ var JauntSchema = new mongoose.Schema({
     votes : Number,
     rating : Number,
     timeTag: String,
-    commentId : Number,
-    tags : [String],
+    tags : [String]
   },
   distance : {
      text : String,
@@ -19,21 +18,21 @@ var JauntSchema = new mongoose.Schema({
      value : Number
   },
   start_location : {
-     lat : Number,
-     lng : Number
+    type: { type: String }, 
+    coordinates: []
   },
   end_location : {
-     lat : Number,
-     lng : Number
+    type: { type: String }, 
+    coordinates: []
   },
   bounds : {
      northeast : {
-        lat : Number,
-        lng : Number
+      type: { type: String }, 
+      coordinates: []
      },
      southwest : {
-        lat : Number,
-        lng : Number
+      type: { type: String }, 
+      coordinates: []
      }
   },
   steps : [
@@ -47,14 +46,14 @@ var JauntSchema = new mongoose.Schema({
            value : String
         },
         end_location : {
-           lat : Number,
-           lng : Number
+          type: { type: String }, 
+          coordinates: []
         },
         html_instructions : String,
         maneuver : String,
         start_location : {
-           lat : Number,
-           lng : Number
+          type: { type: String }, 
+          coordinates: []
         }
       }
    ],
@@ -69,12 +68,15 @@ var JauntSchema = new mongoose.Schema({
          value : String
       },
       location : {
-                 lat : Number,
-                 lng : Number
-              }
+        type: { type: String }, 
+        coordinates: []
+      }
     }
   ]
 });
+
+JauntSchema.index({ start_location : '2dsphere' });
+JauntSchema.index({ end_location : '2dsphere' });
 
 JauntSchema.pre('save', function(next){ 
   next();
@@ -93,17 +95,16 @@ var myJaunt = new Jaunt(
     votes : 12,
     rating : 3.5,
     timeTag: "All Day",
-    commentId : 1,
     tags : ["beer", "dogs"],
     },
     bounds : {
        northeast : {
-          lat : 37.7854137,
-          lng : -122.4085524
+        type: 'Point',
+        coordinates : [-122.4085524, 37.7854137]
        },
        southwest : {
-          lat : 37.7834319,
-          lng : -122.4090658
+        type: 'Point',
+        coordinates : [-122.4090658, 37.7834319]
        }
     },
     "distance" : {
@@ -113,6 +114,14 @@ var myJaunt = new Jaunt(
     "duration" : {
        "text" : "4 min",
        "value" : 218
+    },
+    "start_location" : {
+      "type" : "Point",
+       "coordinates" : [-122.4088122, 37.7834319],
+    },
+    "end_location" : {
+      "type" : "Point",
+       "coordinates" : [-122.4090658, 37.7853691]
     },
     "steps" : [
        {
@@ -125,13 +134,13 @@ var myJaunt = new Jaunt(
              "value" : 27
           },
           "end_location" : {
-             "lat" : 37.7836379,
-             "lng" : -122.4085524
+            type: 'Point',
+            coordinates : [-122.4085524, 37.7836379]
           },
           "html_instructions" : "Head \u003cb\u003enortheast\u003c/b\u003e on \u003cb\u003eMarket St\u003c/b\u003e toward \u003cb\u003eTurk St\u003c/b\u003e",
           "start_location" : {
-             "lat" : 37.7834319,
-             "lng" : -122.4088122
+            type: 'Point',
+            coordinates : [-122.4088122, 37.7834319]
           }
        },
        {
@@ -144,14 +153,14 @@ var myJaunt = new Jaunt(
              "value" : 73
           },
           "end_location" : {
-             "lat" : 37.7844507,
-             "lng" : -122.4086873
+            type: 'Point',
+            coordinates : [-122.4086873, 37.7844507]
           },
           "html_instructions" : "Turn \u003cb\u003eleft\u003c/b\u003e toward \u003cb\u003eEddy St\u003c/b\u003e",
           "maneuver" : "turn-left",
           "start_location" : {
-             "lat" : 37.7836379,
-             "lng" : -122.4085524
+            type: 'Point',
+            coordinates : [-122.4085524, 37.7836379]
           }
        },
        {
@@ -164,14 +173,14 @@ var myJaunt = new Jaunt(
              "value" : 7
           },
           "end_location" : {
-             "lat" : 37.78446599999999,
-             "lng" : -122.4085706
+            type: 'Point',
+            coordinates : [-122.4085706, 37.78446599999999]
           },
           "html_instructions" : "Turn \u003cb\u003eright\u003c/b\u003e onto \u003cb\u003eEddy St\u003c/b\u003e",
           "maneuver" : "turn-right",
           "start_location" : {
-             "lat" : 37.7844507,
-             "lng" : -122.4086873
+            type: 'Point',
+            coordinates : [-122.4086873, 37.7844507]
           }
        },
        {
@@ -184,14 +193,14 @@ var myJaunt = new Jaunt(
              "value" : 87
           },
           "end_location" : {
-             "lat" : 37.7854137,
-             "lng" : -122.4087533
+            type: 'Point',
+            coordinates : [-122.4087533, 37.7854137]
           },
           "html_instructions" : "Turn \u003cb\u003eleft\u003c/b\u003e onto \u003cb\u003eCyril Magnin St\u003c/b\u003e",
           "maneuver" : "turn-left",
           "start_location" : {
-             "lat" : 37.78446599999999,
-             "lng" : -122.4085706
+            type: 'Point',
+            coordinates : [-122.4085706, 37.78446599999999]
           }
        },
        {
@@ -204,14 +213,14 @@ var myJaunt = new Jaunt(
              "value" : 24
           },
           "end_location" : {
-             "lat" : 37.7853691,
-             "lng" : -122.4090658
+            type: 'Point',
+            coordinates : [-122.4090658, 37.7853691]
           },
           "html_instructions" : "Turn \u003cb\u003eleft\u003c/b\u003e onto \u003cb\u003eEllis St\u003c/b\u003e\u003cdiv style=\"font-size:0.9em\"\u003eDestination will be on the right\u003c/div\u003e",
           "maneuver" : "turn-left",
           "start_location" : {
-             "lat" : 37.7854137,
-             "lng" : -122.4087533
+            type: 'Point',
+            coordinates : [-122.4087533, 37.7854137]
           }
        }
     ],
@@ -224,9 +233,9 @@ var myJaunt = new Jaunt(
         time: 60,
         API : "Some API String",
         location : {
-                   lat : 37.785572,
-                   lng :  -122.421507
-                }
+          type: 'Point',
+          coordinates : [-122.421507, 37.785572]
+        }
       },
       {
         name : "Vertigo",
@@ -236,16 +245,12 @@ var myJaunt = new Jaunt(
         time : 120,
         API : "Some API String",
         location : {
-                   lat : 37.787534,
-                   lng : -122.419894
-                }
+          type: 'Point',
+          coordinates : [-122.419894, 37.787534]
+        }
       }
     ]
-
-
-}
-
-  );
+});
 
 myJaunt.save();
 */
