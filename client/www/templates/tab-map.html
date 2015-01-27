@@ -1,7 +1,13 @@
 <!-- jaunt-detail will eventually be displayed on map when hovering over a jaunt.  Clicking on jaunt-detail will lead to place-detail-->
 <ion-view view-title="Map">
 
+  <!-- list view -->
+  <ion-nav-buttons side="secondary">
+    <a href="#/tab/jaunts"><button class="button button-icon icon ion-navicon"></button></a>
+  </ion-nav-buttons>
+
   <ion-content scroll="false">
+
     <map on-create="mapCreated(map)"></map>
     
   </ion-content>
