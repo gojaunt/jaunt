@@ -1,10 +1,13 @@
 $(function(){
   var points, map, directionService, myOptions;
   var directionsArr = [];
+  var path;
+  var jaunt;
+  var poly;
 
 
 function Init() {
-  points = [];
+  points = [undefined, undefined];
   var mapCanvas = document.getElementById('map-canvas');
   myOptions = {
       zoom: 17,
@@ -18,11 +21,14 @@ function Init() {
       draggableCursor: "crosshair"
     }
   map = new google.maps.Map(mapCanvas, myOptions);
+  poly = new google.maps.Polyline({ map: map });
   directionsDisplay = new google.maps.DirectionsRenderer();
   directionService = new google.maps.DirectionsService();
   
   google.maps.event.addListener(map, "click", function(evt) {
+    points.shift();
     points.push(evt);
+
     var infowindow = new google.maps.InfoWindow(), marker, i;
     var latitude = evt.latLng.k;
     var longitude = evt.latLng.D;
@@ -31,6 +37,12 @@ function Init() {
             position: new google.maps.LatLng(latitude, longitude),
             map: map
     });
+    if(points[0] !== undefined){
+      console.log(points);  
+      var p2p = createPointToPoint(points);
+      var req = createRequestObjArr(p2p);
+      getDirections(req);
+    }
   });
 }
 // returns an array of objects that have origin and destination keys
@@ -67,17 +79,64 @@ var getDirections = function(reqArr){
     var request = reqArr[k].reqObj;
     directionService.route(request, function(result, status) {
         if (status == google.maps.DirectionsStatus.OK) {
-          orderReceivedDirections(result);
-          // directionsDisplay.setDirections(result);
+          buildPath(result);
+          
         }
       });
   }
 };
 
-/*receives the directions from GOOGLE and places it in proper order in the directions array*/
-var orderReceivedDirections = function(result){
-  console.log('I got directions', result);
+
+
+var buildPath = function(result){
+  console.log(result);
+  var stepper = result.routes[0].legs[0].steps;
+  if(jaunt === undefined){
+    jaunt = {};
+    jaunt.start_location = {};
+    jaunt.start_location.lat = stepper[0].start_location.lat();
+    jaunt.start_location.lng = stepper[0].start_location.lng();
+    jaunt.steps = [];
+    jaunt.end_location = {};
+  } 
+    
+  for(var i = 0; i < stepper.length; i++){
+    var newStep = {};
+    newStep.distance = {};
+    newStep.distance.text = stepper[i].distance.text;
+    newStep.distance.value = stepper[i].distance.value;
+    newStep.duration = {};
+    newStep.duration.text = stepper[i].distance.text;
+    newStep.duration.value = stepper[i].distance.value;
+    newStep.end_location = {};
+    newStep.end_location.lat = stepper[i].end_location.lat();
+    newStep.end_location.lng = stepper[i].end_location.lng();
+    newStep.html_instructions = stepper[i].instructions;
+    newStep.maneuver = stepper[i].maneuver;
+    newStep.start_location = {};
+    newStep.start_location.lat = stepper[i].start_location.lat();
+    newStep.start_location.lng = stepper[i].start_location.lng();
+    //console.log(newStep);
+    jaunt.steps.push(newStep);
+  }
+  
+  jaunt.end_location.lat = stepper[stepper.length-1].end_location.lat();
+  jaunt.end_location.lng = stepper[stepper.length-1].end_location.lng();
+
+  console.log('jaunt is ', jaunt);
+  displayRoute();
 };
+
+var displayRoute = function(){
+  var linepoints = [];
+  for (var i = 0; i < jaunt.steps.length; i++){
+    linepoints.push(new google.maps.LatLng(jaunt.steps[i].start_location.lat, jaunt.steps[i].start_location.lng));
+    linepoints.push(new google.maps.LatLng(jaunt.steps[i].end_location.lat, jaunt.steps[i].end_location.lng));
+  }
+  console.log("linepoints is ",linepoints);
+  poly.setPath(linepoints);
+}
+
 Init();
 
 $('button').click(function(){
