@@ -11,8 +11,12 @@ module.exports = function (app, express) {
   app.use(morgan('dev'));
   app.use(bodyParser.urlencoded({extended: true}));
   app.use(bodyParser.json());
+<<<<<<< HEAD
   // app.use(express.static(__dirname + '/../../client/www/'));
   app.use(express.static(__dirname + '/../../mapTesting/'));
+=======
+  app.use(express.static(__dirname + '/../../client/www/'));
+>>>>>>> 046555b4e6a349a5425c0891d37e179bf4d4fa3d
 
 
   app.use('/api/users', userRouter); // use user router for all user request
