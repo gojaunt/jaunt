@@ -4,7 +4,17 @@ $(function(){
   var path;
   var jaunt;
   var poly;
+  var stopClicked = false;
+  var firstDataEntered = false;
 
+  //changes the boolean value of 'stopClicked' to indicate whether button was clicked
+  // true means button has been clicked
+  $('#stop').click(function(){
+    stopClicked = true;
+  });
+  $('#route').click(function(){
+    stopClicked = false;
+  });
 
 function Init() {
   points = [undefined, undefined];
@@ -26,6 +36,7 @@ function Init() {
   directionService = new google.maps.DirectionsService();
   
   google.maps.event.addListener(map, "click", function(evt) {
+    firstDataEntered = true;
     points.shift();
     points.push(evt);
 
@@ -37,53 +48,34 @@ function Init() {
             position: new google.maps.LatLng(latitude, longitude),
             map: map
     });
+
     if(points[0] !== undefined){
       console.log(points);  
-      var p2p = createPointToPoint(points);
-      var req = createRequestObjArr(p2p);
-      getDirections(req);
+      // var p2p = createPointToPoint(points);
+      var reqObj = createRequestObjArr(points);
+      getDirections(reqObj);
+
+    if(stopClicked){
+      console.log('stop is: '+stopClicked);
+      //prompt the user for input
+      var name = prompt("What is the name of the stop?");
+      var description = prompt("Please add a description.");
+      var photoURL = prompt("Please add a photoURL.");
+      var description = prompt("Please add a description.");
+      var duration = prompt('How long did you stay there?');
+      //save the input in the jaunt object
     }
   });
 }
-// returns an array of objects that have origin and destination keys
-var createPointToPoint = function(pointsArr){
-  var point2pointArr = [];
-  for(var i=0; i<pointsArr.length-1; i++){
-    var obj = {index: i,
-              origin: pointsArr[i],
-              destination: pointsArr[i+1]
-            };
-    point2pointArr.push(obj);
+
+// returns a request object that can be used by google maps api
+var createRequestObj = function(arr){
+  var reqObj = {
+    origin : arr[0].latLng,
+    destination : arr[1].latLng,
+    travelMode: google.maps.TravelMode.WALKING
   }
-  return point2pointArr;
-};
-// returns an array of routes
-var createRequestObjArr = function(arr){
-  var output = [];
-  for(var j=0; j<arr.length; j++){
-    var obj = {
-      index: j,
-      reqObj: {
-        origin : arr[j].origin.latLng,
-        destination : arr[j].destination.latLng,
-        travelMode: google.maps.TravelMode.WALKING
-      }
-    };
-    output.push(obj);
-  }
-  return output;
-};
-// call GOOGLE direction services to get directions
-var getDirections = function(reqArr){
-  for(var k=0; k<reqArr.length; k++){
-    var request = reqArr[k].reqObj;
-    directionService.route(request, function(result, status) {
-        if (status == google.maps.DirectionsStatus.OK) {
-          buildPath(result);
-          
-        }
-      });
-  }
+  return reqObj;
 };
 
 
@@ -137,12 +129,22 @@ var displayRoute = function(){
   poly.setPath(linepoints);
 }
 
+var getDirections = function(reqObj){
+  directionService.route(reqObj, function(result, status) {
+      if (status == google.maps.DirectionsStatus.OK) {
+        console.log(result);
+        // directionsDisplay.setDirections(result);
+      }
+    });
+};
+
+
 Init();
 
-$('button').click(function(){
+/*$('button').click(function(){
   var a = createPointToPoint(points);
   var requestArr = createRequestObjArr(a);
   getDirections(requestArr);
   // console.log(requestArr);
-});
+});*/
 });
