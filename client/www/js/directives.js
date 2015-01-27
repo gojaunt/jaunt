@@ -9,7 +9,7 @@ angular.module('starter.directives', [])
     link: function ($scope, $element, $attr) {
       function initialize() {
         var mapOptions = {
-          center: new google.maps.LatLng(43.07493, -89.381388),
+          center: new google.maps.LatLng(37.7833, -122.4167),
           zoom: 16,
           mapTypeId: google.maps.MapTypeId.ROADMAP
         };
@@ -22,6 +22,11 @@ angular.module('starter.directives', [])
           e.preventDefault();
           return false;
         });
+
+        // Runs popover function on mouseover.  Better way to consolidate this functionality and popover?
+        google.maps.event.addDomListener(marker, 'mouseover', function(e) {
+          console.log('Pop up jaunt detail');
+        })
       }
 
       if (document.readyState === "complete") {

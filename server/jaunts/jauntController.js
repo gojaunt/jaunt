@@ -34,6 +34,7 @@ module.exports = {
   newJaunt: function (req, res, next) {
 	var createJaunt = Q.nbind(Jaunt.create, Jaunt);
 
+<<<<<<< HEAD
 	var newJaunt = test.jaunt;
 
 	createJaunt(newJaunt)
@@ -43,6 +44,18 @@ module.exports = {
     .fail(function (error) {
       next(error);
     });
+=======
+	res.send('saved!');
+	// var newJaunt = test.jaunt;
+
+	// createJaunt(newJaunt)
+	//   .then(function (createdLink) {
+	// 	  res.send("SAVED DER");
+	//   })
+ //    .fail(function (error) {
+ //      next(error);
+ //    });
+>>>>>>> 046555b4e6a349a5425c0891d37e179bf4d4fa3d
 	
 	// var url = req.body.url;
 	// console.log(req.body);
