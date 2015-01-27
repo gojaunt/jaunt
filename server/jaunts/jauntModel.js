@@ -18,21 +18,33 @@ var JauntSchema = new mongoose.Schema({
      value : Number
   },
   start_location : {
-    type: { type: String }, 
-    coordinates: []
+    type: { 
+      type: String,
+      default: 'Point'
+    }, 
+    coordinates: [Number]
   },
   end_location : {
-    type: { type: String }, 
-    coordinates: []
+    type: { 
+      type: String,
+      default: 'Point'
+    }, 
+    coordinates: [Number]
   },
   bounds : {
      northeast : {
-      type: { type: String }, 
-      coordinates: []
+      type: { 
+        type: String,
+        default: 'Point'
+      }, 
+      coordinates: [Number]
      },
      southwest : {
-      type: { type: String }, 
-      coordinates: []
+      type: { 
+        type: String,
+        default: 'Point'
+      }, 
+      coordinates: [Number]
      }
   },
   steps : [
@@ -46,14 +58,20 @@ var JauntSchema = new mongoose.Schema({
            value : String
         },
         end_location : {
-          type: { type: String }, 
-          coordinates: []
+          type: { 
+            type: String,
+            default: 'Point'
+          }, 
+          coordinates: [Number]
         },
         html_instructions : String,
         maneuver : String,
         start_location : {
-          type: { type: String }, 
-          coordinates: []
+          type: { 
+            type: String,
+            default: 'Point'
+          }, 
+          coordinates: [Number]
         }
       }
    ],
@@ -68,8 +86,11 @@ var JauntSchema = new mongoose.Schema({
          value : String
       },
       location : {
-        type: { type: String }, 
-        coordinates: []
+        type: { 
+          type: String,
+          default: 'Point'
+        }, 
+        coordinates: [Number]
       }
     }
   ]
