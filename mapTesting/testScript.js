@@ -51,12 +51,11 @@ function Init() {
 
     if(points[0] !== undefined){
       console.log(points);  
-      // var p2p = createPointToPoint(points);
-      var reqObj = createRequestObjArr(points);
+      var reqObj = createRequestObj(points);
       getDirections(reqObj);
+    }
 
     if(stopClicked){
-      console.log('stop is: '+stopClicked);
       //prompt the user for input
       var name = prompt("What is the name of the stop?");
       var description = prompt("Please add a description.");
@@ -132,8 +131,7 @@ var displayRoute = function(){
 var getDirections = function(reqObj){
   directionService.route(reqObj, function(result, status) {
       if (status == google.maps.DirectionsStatus.OK) {
-        console.log(result);
-        // directionsDisplay.setDirections(result);
+        buildPath(result);
       }
     });
 };
