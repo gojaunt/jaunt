@@ -6,16 +6,45 @@ angular.module('starter.controllers', [])
 
     $scope.polys = [];
 
-    // note: created a dummy point that on click will show popover of jaunt
-    marker = new google.maps.Marker({
-      position: new google.maps.LatLng(37.7833, -122.4167),
-      map: $scope.map
-    });
     //$scope.centerOnMe();
     //then call show(near);
     $scope.show(0);
+
+    // display jaunts near me on map creation
+    $scope.displayJaunts($scope.jaunts);
   };
 
+  // this jaunt data and jaunt data in jaunts needs to be synced
+  $scope.jaunts = Jaunts.allJaunts();
+
+  // creates markers and infowindows on google map
+  $scope.displayJaunts = function(jaunts) {
+    var infowindow = new google.maps.InfoWindow();
+
+    var marker, i;
+
+    for (i = 0; i < jaunts.length; i++) {
+      marker = new google.maps.Marker({
+        position: new google.maps.LatLng(jaunts[i].location[0], jaunts[i].location[1]),
+        map: $scope.map
+      });
+
+      // opens clickable infowindow on hover
+      google.maps.event.addListener(marker, 'mouseover', (function(marker, i) {
+        return function() {
+          var contentString = 
+                '<a class="infoWindow" href="#/tab/jaunts/' + jaunts[i].id + '"><div>' + jaunts[i].name + ': ' + jaunts[i].rating
+                +'</div></a>';
+
+          infowindow.setContent(contentString);
+          infowindow.open($scope.map, marker);
+        }
+      })(marker, i));
+
+    }
+  };
+
+  /*// find my location functionality not in use
   $scope.centerOnMe = function () {
     console.log("Centering");
     if (!$scope.map) {
@@ -34,35 +63,10 @@ angular.module('starter.controllers', [])
     }, function (error) {
       alert('Unable to get location: ' + error.message);
     });
-  };
+  };*/
 
-  // adds popover functionality to map.  Need to connect to map listener
-  $ionicPopover.fromTemplateUrl('templates/popover.html', {
-    scope: $scope,
-  }).then(function(popover) {
-    $scope.popover = popover;
-  });
+  //////////////////// Simple Search ////////////////////
 
-  $scope.openPopover = function($event) {
-    $scope.popover.show($event);
-  };
-  /*$scope.closePopover = function() {
-    $scope.popover.hide();
-  };
-  //Cleanup the popover when we're done with it!
-  $scope.$on('$destroy', function() {
-    $scope.popover.remove();
-  });
-  // Execute action on hide popover
-  $scope.$on('popover.hidden', function() {
-    // Execute action
-  });
-  // Execute action on remove popover
-  $scope.$on('popover.removed', function() {
-    // Execute action
-  });*/
-
-  // adjust from global scope? Popover for new users?
   $scope.search = 'jaunts near me!';
 
   // adds Action Sheet for simple search  
@@ -90,7 +94,6 @@ angular.module('starter.controllers', [])
       hideSearch();
     }, 3000);
   };
-
 
   //calls Jaunts.getAllPolys to receive an array of polylines; loops through to attach to map
   $scope.show = function(index){
