@@ -3,15 +3,16 @@ angular.module('starter.services', [])
 /**
  * A simple example service that returns some data.
  */
-.factory('Jaunts', function() {
+.factory('Jaunts', function($http, $q) {
   // Might use a resource here that returns a JSON array
 
   // Some fake testing data
-  var jaunts = [{
+  var geoCoder = new google.maps.Geocoder();
+
+  var jauntFakers = [{
     id: 0,
     name: 'Jaunt 1',
     rating: '4.5 out of 5.0',
-    location: [37.783, -122.417],
     tags: ['Beer', 'Drunk', 'Sights'],
     description: 'Descriptive hipster lorem forage retro lo-fi hashtag food truck Blue Bottle. Organic wolf Pinterest, crucifix trust fund Wes Anderson leggings twee tote bag +1.',
     face: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png',
@@ -56,7 +57,6 @@ angular.module('starter.services', [])
     id: 1,
     name: 'Jaunt 2',
     rating: '4.5 out of 5.0',
-    location: [37.784, -122.418],
     tags: ['Beer', 'Drunk', 'Sights'],
     description: 'Descriptive hipster lorem forage retro lo-fi hashtag food truck Blue Bottle. Organic wolf Pinterest, crucifix trust fund Wes Anderson leggings twee tote bag +1.',
     face: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460',
@@ -100,7 +100,6 @@ angular.module('starter.services', [])
     id: 2,
     name: 'Jaunt 3',
     rating: '4.5 out of 5.0',
-    location: [37.785, -122.419],
     tags: ['Beer', 'Drunk', 'Sights'],
     description: 'Descriptive hipster lorem forage retro lo-fi hashtag food truck Blue Bottle. Organic wolf Pinterest, crucifix trust fund Wes Anderson leggings twee tote bag +1.',
     face: 'https://pbs.twimg.com/profile_images/491274378181488640/Tti0fFVJ.jpeg',
@@ -123,10 +122,45 @@ angular.module('starter.services', [])
     }]
   }];
 
+  var jaunts = jauntFakers;
+
   return {
+
+    selectJaunts: function(queryObj){
+      return $http.get('/api/jaunts');
+    },
+    geoCode: function(loc){
+      var deferred = $q.defer();
+      geoCoder.geocode({address: loc}, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        //map.setCenter(results[0].geometry.location);
+        console.log(results[0].geometry.location);
+        var lat = results[0].geometry.location.lat();
+        var lng = results[0].geometry.location.lng();
+        deferred.resolve([lng, lat]);
+      } else {
+        alert("Geocode was not successful for the following reason: " + status);
+      }
+    })
+      return deferred.promise;
+
+      $http.get('/api/jaunts')
+        .success(function(data, status, headers, config) {
+          // this callback will be called asynchronously
+          // when the response is available
+          console.log('jauntSelect', data);
+          jaunts = data;
+          //return data;
+        }).
+        error(function(data, status, headers, config) {
+          // called asynchronously if an error occurs
+          // or server returns response with an error status.
+        });
+      //console.log(__dirname);
+    },
     // returns all jaunt data
     allJaunts: function() {
-      return jaunts;
+      return jaunts = jauntFakers;
     },
     // returns selected jaunt data
     getJaunt: function(jauntId) {
@@ -156,8 +190,9 @@ angular.module('starter.services', [])
       }
       return null;
     },
-    getAllPolys : function(){
+    getAllPolys : function(jaunts){
       var polys = [];
+      console.log('in get all poly', jaunts);
       
       for(var i = 0; i< jaunts.length; i++){
         var linePoints = [];
