@@ -1,0 +1,23 @@
+<ion-view view-title="Jaunts">
+  <!-- map view -->
+  <ion-nav-buttons side="secondary">
+    <a href="#/tab/map"><button class="button button-icon icon ion-ios7-location"> Map</button></a>
+  </ion-nav-buttons>
+
+  <ion-content>
+    <ion-list>
+      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="jaunt in jaunts" type="item-text-wrap" href="#/tab/jaunts/{{jaunt.id}}">
+        <img ng-src="{{jaunt.face}}">
+        <h2>{{jaunt.name}}</h2>
+        <p>
+          <a href="#" class="subdued">{{jaunt.rating}}</a>
+          <!-- Note: better way to get to tags in the controller? -->
+          <a href="#" class="subdued" ng-repeat="tag in jaunt.tags">{{tag}}</a>
+        </p>
+        <p>{{jaunt.description}}</p>
+        <i class="icon ion-chevron-right icon-accessory"></i>
+
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>
