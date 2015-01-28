@@ -17,6 +17,22 @@ $(function(){
     stopClicked = false;
   });
 
+//sends a post request to save jaunt object
+  $('#save').click(function(){
+    var dataObj = JSON.stringify(jaunt);
+    $.post("/saveJaunt",dataObj, function(data){
+      data = JSON.parse(data);
+    });
+  });
+
+  //gets jaunt data from file
+  $('#getJaunts').click(function(){
+    $.get("/getJaunts", function(data){
+      //data comes back as a JSON object.
+      console.log(data);
+    });
+  });
+
   //create an empty array where jaunt stops can be stored
   jaunt.stops = [];
 
