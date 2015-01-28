@@ -237,12 +237,11 @@ var myJaunt = new Jaunt(
     ],
     stops: [
       {
-        name : "Tommy's Joint",
+        name : "Tommy's Joynt",
         description : "get the burger",
         photoUrl: "somePhotoUrl",
-        tags : ["Drinking", "Food"],
+        tags : ["drinking", "food"],
         time: 60,
-        API : "Some API String",
         location : {
           coordinates : [-122.421507, 37.785572]
         }
@@ -251,7 +250,7 @@ var myJaunt = new Jaunt(
         name : "Vertigo",
         description : "get your dance on",
         photoUrl: "somePhotoUrl",
-        tags : ["Drinking", "Dancing"],
+        tags : ["drinking", "dancing"],
         time : 120,
         API : "Some API String",
         location : {

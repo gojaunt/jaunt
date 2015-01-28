@@ -2,19 +2,15 @@ $(function(){
 
   $('button').click(function(){
 
-    // var queryData = {
-    //   end_location: {
-    //     coordinates: [-122.4025466, 37.7943864],
-    //     range: 1500
-    //   },
-    //   tags : ['happy hour']
-    // };
-
     var queryData = {
-      stops: {
-        tags: ["Drinking"]
+      stops : {
+        location : {
+          coordinates: [-122.421507, 37.785572],
+          range: 1
+        }
       }
     };
+
 
     $.ajax({
       url: "http://localhost:5000/api/jaunts",

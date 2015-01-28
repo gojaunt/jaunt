@@ -2,6 +2,8 @@ module.exports.dbQuery = function (queryJSON) {
 
   var dbQuery = {};
 
+  console.log(queryJSON);
+
   if (queryJSON.start_location) {
     dbQuery.start_location = {
       $near : {
@@ -94,13 +96,29 @@ module.exports.dbQuery = function (queryJSON) {
   }
 
 
-  if (queryJSON.stops.name) {
-    dbQuery['stops.name'] = queryJSON.stops.name;
-  }
+  if (queryJSON.stops) {
 
-  if (queryJSON.stops.tags) {
-    dbQuery['stops.tags'] = {
-      $in : queryJSON.stops.tags
+    if (queryJSON.stops.name) {
+      dbQuery['stops.name'] = queryJSON.stops.name;
+    }
+
+    if (queryJSON.stops.tags) {
+      dbQuery['stops.tags'] = {
+        $in : queryJSON.stops.tags
+      }
+    }
+
+    if (queryJSON.stops.location) {
+      dbQuery['stops.location'] = {
+        $near : {
+          $geometry : {
+            type : "Point",
+            coordinates : [queryJSON.stops.location.coordinates[0] * 1,
+                           queryJSON.stops.location.coordinates[1] * 1 ]
+          },
+          $maxDistance : queryJSON.stops.location.range * 1
+        }
+      }
     }
   }
 
