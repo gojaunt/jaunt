@@ -24,14 +24,13 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.directives',
   $stateProvider
 
   // setup an abstract state for the tabs directive
-    .state('tab', {
+  .state('tab', {
     url: "/tab",
     abstract: true,
     templateUrl: "templates/tabs.html"
   })
 
   // Each tab has its own nav history stack:
-
   .state('tab.map', {
     url: '/map',
     views: {
@@ -51,25 +50,24 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.directives',
         }
       }
     })
-    .state('tab.jaunt-detail', {
-        url: '/jaunts/:jauntId',
-        views: {
-          'tab-jaunts': {
-            templateUrl: 'templates/jaunt-detail.html',
-            controller: 'JauntDetailCtrl'
-          }
+  .state('tab.jaunt-detail', {
+      url: '/jaunts/:jauntId',
+      views: {
+        'tab-jaunts': {
+          templateUrl: 'templates/jaunt-detail.html',
+          controller: 'JauntDetailCtrl'
         }
-      })
-      .state('tab.place-detail', {
-        url: '/jaunts/:jauntId/:placeId',
-        views: {
-          'tab-jaunts': {
-            templateUrl: 'templates/place-detail.html',
-            controller: 'PlaceDetailCtrl'
-          }
+      }
+    })
+    .state('tab.place-detail', {
+      url: '/jaunts/:jauntId/:placeId',
+      views: {
+        'tab-jaunts': {
+          templateUrl: 'templates/place-detail.html',
+          controller: 'PlaceDetailCtrl'
         }
-      })
-
+      }
+    })
   .state('tab.account', {
     url: '/account',
     views: {
@@ -78,6 +76,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.directives',
         controller: 'AccountCtrl'
       }
     }
+  })
+  .state('home', {
+    url: '/home',
+    templateUrl: 'templates/home.html',
+    controller: 'HomeCtrl'
   });
 
   // if none of the above states are matched, use this as the fallback
