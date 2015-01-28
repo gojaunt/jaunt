@@ -1,28 +1,17 @@
 var Jaunt = require('./jauntModel.js');
 var test = require('./test.js');
-var geo = require('../utils/geoUtils.js');
+var query = require('../utils/queryUtils.js');
 var Q = require('q');
 
 module.exports = {
 
   fetchJaunts: function (req, res, next) {
 	var find = Q.nbind(Jaunt.find, Jaunt);
-	var query = req.query;
 
-	if (query.start_location) {
-		query.start_location.rangeDegrees = geo.metersToDegrees( query.start_location.range );
-	}
-	if (query.end_location) {
-		query.end_location.rangeDegrees = geo.metersToDegrees( query.end_location.range );
-	}
+	var dbQuery = query.dbQuery(req.query);
 
 
-	console.log(query);
-
-
-	// res.send('queried!');
-
-	find({})
+	find(dbQuery)
 	  .then(function (jaunts) {
 	    res.json(jaunts);
 	  })
@@ -34,7 +23,6 @@ module.exports = {
   newJaunt: function (req, res, next) {
 	var createJaunt = Q.nbind(Jaunt.create, Jaunt);
 
-<<<<<<< HEAD
 	var newJaunt = test.jaunt;
 
 	createJaunt(newJaunt)
@@ -44,18 +32,6 @@ module.exports = {
     .fail(function (error) {
       next(error);
     });
-=======
-	res.send('saved!');
-	// var newJaunt = test.jaunt;
-
-	// createJaunt(newJaunt)
-	//   .then(function (createdLink) {
-	// 	  res.send("SAVED DER");
-	//   })
- //    .fail(function (error) {
- //      next(error);
- //    });
->>>>>>> 046555b4e6a349a5425c0891d37e179bf4d4fa3d
 	
 	// var url = req.body.url;
 	// console.log(req.body);
