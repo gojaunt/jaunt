@@ -59,6 +59,11 @@ gulp.task('karma', shell.task([
   'karma start'
 ]));
 
+gulp.task('watch', function () {
+  gulp.watch("client/scss/*.scss", ['sass']);
+  gulp.watch("*.html", ['bs-reload']);
+});
+
 // start our node server using foreman
 gulp.task('serve', shell.task([
   'foreman run local'
@@ -69,9 +74,6 @@ gulp.task('install', shell.task([
   'bower install'
 ]));
 
-gulp.task('default', ['sass', 'browser-sync'], function () {
-  gulp.watch("client/scss/*.scss", ['sass']);
-  gulp.watch("*.html", ['bs-reload']);
-});
+gulp.task('default', ['sass', 'browser-sync', 'watch']);
 
 gulp.task('deploy', ['start']);
