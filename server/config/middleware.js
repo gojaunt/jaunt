@@ -9,14 +9,10 @@ module.exports = function (app, express) {
   var jauntRouter = express.Router();
 
   app.use(morgan('dev'));
-  app.use(bodyParser.urlencoded({extended: true}));
+  app.use(bodyParser.urlencoded({extended: false}));
   app.use(bodyParser.json());
-<<<<<<< HEAD
-  // app.use(express.static(__dirname + '/../../client/www/'));
-  app.use(express.static(__dirname + '/../../mapTesting/'));
-=======
   app.use(express.static(__dirname + '/../../client/www/'));
->>>>>>> 046555b4e6a349a5425c0891d37e179bf4d4fa3d
+  // app.use(express.static(__dirname + '/../../APITesting/'));
 
 
   app.use('/api/users', userRouter); // use user router for all user request
