@@ -3,7 +3,7 @@
 
   <!-- list view -->
   <ion-nav-buttons side="secondary">
-    <a href="#/tab/jaunts"><button class="button button-icon icon ion-navicon"></button></a>
+    <a href="#/tab/jaunts"><button class="button button-icon icon ion-navicon"> List</button></a>
   </ion-nav-buttons>
 
   <ion-content scroll="false">
@@ -12,8 +12,7 @@
     
   </ion-content>
 
-  <!-- places footer compass icon which finds location
-  <ion-footer-bar class="bar-stable">
-    <a ng-click="centerOnMe()" class="button button-icon icon ion-navigate"></a>
-  </ion-footer-bar> -->
+  <a ng-click="showSearch()"><button><ion-footer-bar class="bar-stable">
+    <div class="title">You fancy... {{search}}</div>
+  </ion-footer-bar></button></a>
 </ion-view>

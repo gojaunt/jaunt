@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('MapCtrl', function($scope, $ionicLoading, $ionicPopover) {
+.controller('MapCtrl', function($scope, $ionicLoading, $ionicPopover, $ionicActionSheet, $timeout) {
   $scope.mapCreated = function(map) {
     $scope.map = map;
 
@@ -56,6 +56,32 @@ angular.module('starter.controllers', [])
   $scope.$on('popover.removed', function() {
     // Execute action
   });*/
+
+  // adjust from global scope? Popover for new users?
+  $scope.search = 'jaunts near me!';
+
+  // adds Action Sheet for simple search  
+  $scope.showSearch = function() {
+
+    // Show action sheet
+    var hideSearch = $ionicActionSheet.show({
+      buttons: [
+        {text: 'jaunts near me!'},
+        {text: 'option 2!'},
+        {text: 'option 3!'}
+      ],
+      titleText: "<b>What do you fancy?<b>",
+      buttonClicked: function(index, choice) {
+        $scope.search = choice.text;
+        return true;
+      }
+    });
+
+    // Hide sheet after three seconds
+    $timeout(function() {
+      hideSearch();
+    }, 3000);
+  };
 })
 
 .controller('JauntsCtrl', function($scope, Jaunts) {
