@@ -1,14 +1,19 @@
 angular.module('starter.controllers', [])
 
-.controller('MapCtrl', function($scope, $ionicLoading, $ionicPopover, $ionicActionSheet, $timeout) {
+.controller('MapCtrl', function($scope, $ionicLoading, $ionicPopover, $ionicActionSheet, $timeout, Jaunts) {
   $scope.mapCreated = function(map) {
     $scope.map = map;
+
+    $scope.polys = [];
 
     // note: created a dummy point that on click will show popover of jaunt
     marker = new google.maps.Marker({
       position: new google.maps.LatLng(37.7833, -122.4167),
       map: $scope.map
     });
+    //$scope.centerOnMe();
+    //then call show(near);
+    $scope.show(0);
   };
 
   $scope.centerOnMe = function () {
@@ -73,15 +78,48 @@ angular.module('starter.controllers', [])
       titleText: "<b>What do you fancy?<b>",
       buttonClicked: function(index, choice) {
         $scope.search = choice.text;
+        console.log("index is ", index, "and choice is", choice);
+        $scope.show(index);
         return true;
       }
     });
+
 
     // Hide sheet after three seconds
     $timeout(function() {
       hideSearch();
     }, 3000);
   };
+
+
+  //calls Jaunts.getAllPolys to receive an array of polylines; loops through to attach to map
+  $scope.show = function(index){
+    if(index === 0){
+      $scope.polys = Jaunts.getAllPolys();
+      addToMap($scope.polys);
+    } else if(index === 1){
+      console.log('do some stuff for 2');
+      removeFromMap($scope.polys);
+      $scope.polys = [];
+    } else if(index === 2){
+      console.log('do some stuff for choice 3');
+      removeFromMap($scope.polys);
+      $scope.polys = [];
+    }
+  };
+
+  var addToMap = function(polys){
+    for(var i = 0; i < polys.length; i++){
+      polys[i].setMap($scope.map);
+    }
+  };
+
+  var removeFromMap = function(polys){
+    for(var i = 0; i < polys.length; i++){
+      polys[i].setMap(null);
+    }
+  };
+
 })
 
 .controller('JauntsCtrl', function($scope, Jaunts) {
