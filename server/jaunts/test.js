@@ -9,7 +9,7 @@ var myJaunt = new Jaunt(
       categories : ["superfun"],
       votes : 12,
       rating : 3.5,
-      times: ["All Day"],
+      times: ["all day"],
       tags : ["beer", "dogs"],
     },
     bounds : {
@@ -130,9 +130,8 @@ var myJaunt = new Jaunt(
         name : "Tommy's Joynt",
         description : "get the burger",
         photoUrl: "somePhotoUrl",
-        tags : ["Drinking", "Food"],
+        tags : ["drinking", "food"],
         time: 60,
-        API : "Some API String",
         location : {
           coordinates : [-122.421507, 37.785572]
         }
@@ -141,9 +140,8 @@ var myJaunt = new Jaunt(
         name : "Vertigo",
         description : "get your dance on",
         photoUrl: "somePhotoUrl",
-        tags : ["Drinking", "Dancing"],
+        tags : ["drinking", "dancing"],
         time : 120,
-        API : "Some API String",
         location : {
           coordinates : [-122.419894, 37.787534]
         }
