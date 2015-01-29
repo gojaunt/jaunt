@@ -1,11 +1,26 @@
 angular.module('starter.controllers', [])
 
 .controller('MapCtrl', function($scope, $ionicLoading, $ionicActionSheet, $timeout, Jaunts) {
+
+
+
   $scope.mapCreated = function(map) {
     $scope.map = map;
 
     $scope.polys = [];
     $scope.markers = [];
+
+    $scope.marker = new google.maps.Marker({
+        map: map,
+        icon: 'img/cross-hairs.gif',
+    });
+    $scope.marker.bindTo('position', map, 'center'); 
+
+
+    google.maps.event.addListener($scope.marker,'click', function (evt) {
+      console.log("yeah center");
+      $scope.center = evt.LatLng;
+    });
 
 
     //$scope.centerOnMe();
