@@ -22,11 +22,6 @@ angular.module('starter.directives', [])
           e.preventDefault();
           return false;
         });
-
-        // Runs popover function on mouseover.  Better way to consolidate this functionality and popover?
-        google.maps.event.addDomListener(marker, 'mouseover', function(e) {
-          console.log('Pop up jaunt detail');
-        })
       }
 
       if (document.readyState === "complete") {
