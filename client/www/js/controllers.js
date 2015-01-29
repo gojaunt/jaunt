@@ -204,17 +204,31 @@ angular.module('starter.controllers', [])
 })
 
 .controller('JauntsCtrl', function($scope, Jaunts) {
-  $scope.jaunts = Jaunts.allJaunts();
+  
+  // empty obj as query since query not set up yet
+  Jaunts.selectJaunts({}).then(function(data){
+    $scope.jaunts = data.data;
+  });
 })
 
 .controller('JauntDetailCtrl', function($scope, $stateParams, Jaunts) {
-  $scope.jaunt = Jaunts.getJaunt($stateParams.jauntId);
-  $scope.places = Jaunts.allPlaces($scope.jaunt);
-  $scope.tags = Jaunts.allTags($scope.jaunt);
+  // need to refactor.  code used in JauntsCtrl and PlaceDetailCtrl as well.  Central location for jaunts query?
+  // empty obj as query since query not set up yet
+  Jaunts.selectJaunts({}).then(function(data){
+    $scope.jaunts = data.data;
+
+    $scope.jaunt = Jaunts.getJaunt($scope.jaunts, $stateParams.jauntId);
+  });
 })
 
 .controller('PlaceDetailCtrl', function($scope, $stateParams, Jaunts) {
-  $scope.place = Jaunts.getPlace($stateParams.jauntId, $stateParams.placeId)
+  // need to refactor.  code used in JauntsCtrl and JauntDetailCtrl as well.  Central location for jaunts query?
+  // empty obj as query since query not set up yet
+  Jaunts.selectJaunts({}).then(function(data){
+    $scope.jaunts = data.data;
+
+    $scope.stop = Jaunts.getStop($scope.jaunts, $stateParams.jauntId, $stateParams.placeId);
+  });
 })
 
 .controller('AccountCtrl', function($scope) {

@@ -5,7 +5,7 @@
   The Jaunts service returns an array of jaunt data
 -->
 
-<ion-view view-title="{{jaunt.name}}">
+<ion-view view-title="{{jaunt.meta.title}}">
   <!-- map view -->
   <ion-nav-buttons side="secondary">
     <a href="#/tab/map"><button class="button button-icon icon ion-ios7-location"> Map</button></a>
@@ -15,28 +15,27 @@
     <div class="list card">
 
       <div class="item item-avatar">
-        <img ng-src="{{jaunt.face}}">
-        <h2>{{jaunt.name}}</h2>
+        <img ng-src="/img/jaunt-logo.png">
+        <h2>{{jaunt.meta.title}}</h2>
         <p>
-          <a href="#" class="subdued">{{jaunt.rating}}</a>
-          <a href="#" class="subdued" ng-repeat="tag in tags">{{tag}}</a>
+          <a href="#" class="subdued">{{jaunt.meta.rating}}</a>
+          <a href="#" class="subdued" ng-repeat="tag in jaunt.meta.tags">{{tag}}</a>
         </p>
       </div>
 
       <div class="item item-body">
-        <!-- Note: perhaps a place to include the map? -->
-        <img class="full-image" ng-src="{{jaunt.face}}">
+        <img class="full-image" ng-src="/img/jaunt-logo.png">
         <p>
-          {{jaunt.description}}
+          Should jaunts have some description?
         </p>
       </div>
 
       <div class="list">
         <ion-list>
-          <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="place in places" type="item-text-wrap" href="#/tab/jaunts/{{jaunt.id}}/{{place.id}}">
-            <img ng-src="{{place.face}}">
-            <h2>{{place.name}}</h2>
-            <p>{{place.description}}</p>
+          <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="stop in jaunt.stops" type="item-text-wrap" href="#/tab/jaunts/{{jaunt._id}}/{{stop._id}}">
+            <img ng-src="/img/jaunt-logo.png">
+            <h2>{{stop.name}}</h2>
+            <p>{{stop.description}}</p>
             <i class="icon ion-chevron-right icon-accessory"></i>
           </ion-item>
         </ion-list>

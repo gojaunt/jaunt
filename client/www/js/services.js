@@ -158,34 +158,26 @@ angular.module('starter.services', [])
         });
       //console.log(__dirname);
     },
-    // returns all jaunt data
+    // returns all jaunt data.  to be removed
     allJaunts: function() {
       return jaunts = jauntFakers;
     },
-    // returns selected jaunt data
-    getJaunt: function(jauntId) {
+    // returns selected Jaunt data
+    getJaunt: function(jaunts, jauntId) {
       for (var i = 0; i < jaunts.length; i++) {
-        if (jaunts[i].id === parseInt(jauntId)) {
+        if (jaunts[i]._id === jauntId) {
           return jaunts[i];
         }
       }
       return null;
     },
-    // returns selected jaunt tags data
-    allTags: function(jaunt) {
-      return jaunt.tags;
-    },
-    // returns selected jaunt places data
-    allPlaces: function(jaunt) {
-      return jaunt.places;
-    },
-    // returns selected place data
-    getPlace: function(jauntId, placeId) {
-      var places = this.getJaunt(jauntId).places;
-      
-      for (var i = 0; i < places.length; i++) {
-        if (places[i].id === parseInt(placeId)) {
-          return places[i];
+    // returns selected stop data
+    getStop: function(jaunts, jauntId, stopId) {
+      var stops = this.getJaunt(jaunts, jauntId).stops;
+
+      for (var i = 0; i < stops.length; i++) {
+        if (stops[i]._id === stopId) {
+          return stops[i];
         }
       }
       return null;
