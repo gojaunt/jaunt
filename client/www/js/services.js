@@ -127,7 +127,7 @@ angular.module('starter.services', [])
   return {
 
     selectJaunts: function(queryObj){
-      return $http.get('/api/jaunts');
+      return $http.get('/api/jaunts', queryObj);
     },
     geoCode: function(loc){
       var deferred = $q.defer();
@@ -141,22 +141,8 @@ angular.module('starter.services', [])
       } else {
         alert("Geocode was not successful for the following reason: " + status);
       }
-    })
+      })
       return deferred.promise;
-
-      $http.get('/api/jaunts')
-        .success(function(data, status, headers, config) {
-          // this callback will be called asynchronously
-          // when the response is available
-          console.log('jauntSelect', data);
-          jaunts = data;
-          //return data;
-        }).
-        error(function(data, status, headers, config) {
-          // called asynchronously if an error occurs
-          // or server returns response with an error status.
-        });
-      //console.log(__dirname);
     },
     // returns all jaunt data.  to be removed
     allJaunts: function() {
@@ -183,8 +169,8 @@ angular.module('starter.services', [])
       return null;
     },
     getAllPolys : function(jaunts){
+      var colors = ['red', 'blue', 'green', 'orange', 'purple']; 
       var polys = [];
-      console.log('in get all poly', jaunts);
       
       for(var i = 0; i< jaunts.length; i++){
         var linePoints = [];
@@ -195,7 +181,7 @@ angular.module('starter.services', [])
           linePoints.push(endPoint);
 
         }
-        var poly = new google.maps.Polyline({strokeColor: 'blue'});
+        var poly = new google.maps.Polyline({strokeColor: colors[i%(colors.length)]});
         poly.setPath(linePoints);
         polys.push(poly);
       }

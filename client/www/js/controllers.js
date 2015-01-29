@@ -2,13 +2,13 @@ angular.module('starter.controllers', [])
 
 .controller('MapCtrl', function($scope, $ionicLoading, $ionicActionSheet, $timeout, Jaunts) {
 
-
-
   $scope.mapCreated = function(map) {
     $scope.map = map;
 
     $scope.polys = [];
     $scope.markers = [];
+    $scope.infowindows = [];
+    $scope.index = 0;
 
     $scope.marker = new google.maps.Marker({
         map: map,
@@ -18,44 +18,46 @@ angular.module('starter.controllers', [])
 
 
     google.maps.event.addListener($scope.marker,'click', function (evt) {
-      console.log("yeah center");
-      $scope.center = evt.LatLng;
+      $scope.center = evt.latLng;
+      console.log("yeah center", $scope.center);
+      $scope.show($scope.index);
+
     });
 
 
+    $scope.center = map.getCenter();
     //$scope.centerOnMe();
     //then call show(near);
     $scope.show(0);
-    //Jaunts.selectJaunts('lalala');
-    $scope.displayJaunts($scope.jaunts);
+    //$scope.displayJaunts($scope.jaunts);
   };
 
-  $scope.displayJaunts = function(jaunts) {
-    var infowindow = new google.maps.InfoWindow();
+  // $scope.displayJaunts = function(jaunts) {
+  //   var infowindow = new google.maps.InfoWindow();
 
-    var marker, i;
+  //   var marker, i;
 
-    for (i = 0; i < jaunts.length; i++) {
-      marker = new google.maps.Marker({
-        position: new google.maps.LatLng(jaunts[i].location[0], jaunts[i].location[1]),
-        map: $scope.map
-      });
+  //   for (i = 0; i < jaunts.length; i++) {
+  //     marker = new google.maps.Marker({
+  //       position: new google.maps.LatLng(jaunts[i].location[0], jaunts[i].location[1]),
+  //       map: $scope.map
+  //     });
 
-      // opens clickable infowindow on hover
-      google.maps.event.addListener(marker, 'click', (function(marker, i) {
-        return function() {
-          var contentString = 
-                '<a class="infoWindow" href="#/tab/jaunts/' + jaunts[i].id + '"><div>' + jaunts[i].name + ': ' + jaunts[i].rating
-               +'</div></a>';
+  //     // opens clickable infowindow on hover
+  //     google.maps.event.addListener(marker, 'click', (function(marker, i) {
+  //       return function() {
+  //         var contentString = 
+  //               '<a class="infoWindow" href="#/tab/jaunts/' + jaunts[i].id + '"><div>' + jaunts[i].name + ': ' + jaunts[i].rating
+  //              +'</div></a>';
 
-          infowindow.setContent(contentString);
-          infowindow.open($scope.map, marker);
-        }
-      })(marker, i));
+  //         infowindow.setContent(contentString);
+  //         infowindow.open($scope.map, marker);
+  //       }
+  //     })(marker, i));
 
-    }
+  //   }
 
-  };
+  // };
 
   $scope.centerOnMe = function () {
     console.log("Centering");
@@ -76,8 +78,6 @@ angular.module('starter.controllers', [])
       alert('Unable to get location: ' + error.message);
     });
   };
-
-  // adds popover functionality to map.  Need to connect to map listener
   
   // adjust from global scope? Popover for new users?
   $scope.search = 'jaunts near me!';
@@ -95,12 +95,11 @@ angular.module('starter.controllers', [])
       titleText: "<b>What do you fancy?<b>",
       buttonClicked: function(index, choice) {
         $scope.search = choice.text;
-        console.log("index is ", index, "and choice is", choice);
-        $scope.show(index);
+        $scope.index = index;
+        $scope.show($scope.index);
         return true;
       }
     });
-
 
     // Hide sheet after three seconds
     $timeout(function() {
@@ -111,74 +110,86 @@ angular.module('starter.controllers', [])
 
   //calls Jaunts.getAllPolys to receive an array of polylines; loops through to attach to map
   $scope.show = function(index){
+    var query = {};
+    var coordinates = [$scope.center.lng(), $scope.center.lat()];
+    removeFromMap($scope.polys);
+    removeFromMap($scope.markers);
+
+    //if statement sets up the query.
     if(index === 0){
-      removeFromMap($scope.polys);
-      deletePins();
-
-      $scope.jaunts = Jaunts.allJaunts();
-      $scope.polys = Jaunts.getAllPolys($scope.jaunts);
-      addToMap($scope.polys);
+      query.start_location = {
+        coordinates: coordinates,
+        range: 1500
+      }
     } else if(index === 1){
-      console.log('do some stuff for 2');
-      removeFromMap($scope.polys);
-      var dest = prompt('Where do you want to go?');
-      var coords = Jaunts.geoCode(dest);
-      coords.then(function(data){
-        coords = data;
-        console.log('this promise is resolving');
-        var query = {
-          end_location : {
-            coordinates : coords,
-            range : 1500
-          }
-        }
-        $scope.map.setCenter(new google.maps.LatLng(coords[1], coords[0]));
-
-        console.log(query);
-        Jaunts.selectJaunts(query).then(function(data){
-          $scope.jaunts = data.data;
-          //console.log('scope jaunts', $scope.jaunts);
-          $scope.polys = Jaunts.getAllPolys($scope.jaunts);
-          showPins($scope.jaunts);
-
-          addToMap($scope.polys);
-          
-        });
-      });
+      query.end_location = {
+        coordinates : coordinates,
+        range: 1500
+      }
     } else if(index === 2){
       console.log('do some stuff for choice 3');
-      removeFromMap($scope.polys);
-      $scope.polys = [];
     }
-  };
 
-  $scope.displayJaunts = function(){
+    //the db call
+    Jaunts.selectJaunts(query).then(function(data){
+      $scope.jaunts = data.data;
+      console.log('scope jaunts', $scope.jaunts);
+      $scope.polys = Jaunts.getAllPolys($scope.jaunts);
 
-  };
-
-  var showPins = function(jaunts){
-    console.log('jaunts in showPins is', jaunts);
-    $scope.markers = []
-    for(var i = 0; i < jaunts.length; i++){
-      for(var j = 0; j < jaunts[i].stops.length; j++){
-        $scope.markers.push(new google.maps.Marker({
-        position: new google.maps.LatLng(jaunts[i].stops[j].location.coordinates[1], jaunts[i].stops[j].location.coordinates[0]),
-        map: $scope.map
-      }));
-      }
+      addToMap($scope.polys);
+      displayMeta();
       
+    });
+  };
+
+  var displayMeta = function(){
+    for(var i = 0; i < $scope.infowindows.length; i++){
+      $scope.infowindows[i].close();
+    }
+    $scope.markers = [];
+    for(var i = 0; i < $scope.jaunts.length; i++){
+
+      var contentString = '<div class="infoW">'+
+            $scope.jaunts[i].meta.title +
+            '</div>';
+
+        var infowindow = new google.maps.InfoWindow({
+            content: contentString
+        });
+
+        $scope.markers.push(new google.maps.Marker({
+            position: new google.maps.LatLng($scope.jaunts[i].start_location.coordinates[1],$scope.jaunts[i].start_location.coordinates[0]),
+            map: $scope.map,
+            title: $scope.jaunts[i].meta.title
+        }));
+        infowindow.open($scope.map,$scope.markers[i]);
+        $scope.infowindows.push(infowindow);
     }
   }
 
-  var deletePins = function(){
-    removeFromMap($scope.markers);
-    $scope.markers = [];
-  }
+  // var showPins = function(jaunts){
+  //   console.log('jaunts in showPins is', jaunts);
+  //   $scope.markers = []
+  //   for(var i = 0; i < jaunts.length; i++){
+  //     for(var j = 0; j < jaunts[i].stops.length; j++){
+  //       $scope.markers.push(new google.maps.Marker({
+  //       position: new google.maps.LatLng(jaunts[i].stops[j].location.coordinates[1], jaunts[i].stops[j].location.coordinates[0]),
+  //       map: $scope.map
+  //     }));
+  //     }
+      
+  //   }
+  // }
 
-  var addToMap = function(polys){
-    for(var i = 0; i < polys.length; i++){
-      polys[i].setMap($scope.map);
-      addInfoWindowToMap(polys[i]);
+  // var deletePins = function(){
+  //   removeFromMap($scope.markers);
+  //   $scope.markers = [];
+  // }
+
+  var addToMap = function(items){
+    for(var i = 0; i < items.length; i++){
+      items[i].setMap($scope.map);
+      addInfoWindowToMap(items[i]);
     }
   };
 
@@ -194,7 +205,7 @@ angular.module('starter.controllers', [])
     });
 
     google.maps.event.addListener(polys, 'click', function(e) {
-      infowindow.setContent('<a><div>leads to jaunt detail</div></a>');
+      infowindow.setContent('<a><div>' + $scope.jaunts[0].title + '</div></a>');
       infowindow.setPosition(e.latLng);
       infowindow.open($scope.map);
     });
