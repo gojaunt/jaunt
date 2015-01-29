@@ -28,7 +28,7 @@ var paths = {
 
 // Compile sass
 gulp.task('sass', function(done) {
-  gulp.src('./client/scss/ionic.app.scss')
+  return gulp.src('./client/scss/ionic.app.scss')
     .pipe(sass())
     .pipe(gulp.dest('./client/www/css/'))
     .pipe(sass({sourcemap: true}))
@@ -46,7 +46,9 @@ gulp.task('sass', function(done) {
 gulp.task('browser-sync', ['serve'],function () {
   browserSync({
     notify: true,
-    // address for server,
+    server : {
+      basedir : './'
+    },
     injectChanges: true,
     files: paths.scripts.concat(paths.html, paths.styles),
     proxy: 'localhost:5000'
@@ -59,9 +61,11 @@ gulp.task('karma', shell.task([
   'karma start'
 ]));
 
+
 gulp.task('watch', function () {
-  gulp.watch("client/scss/*.scss", ['sass']);
-  gulp.watch("*.html", ['bs-reload']);
+  gulp.watch("./client/scss/*.scss", ['sass'])
+  gulp.watch("./client/templates/*.html", ['bs-reload']);
+  gulp.watch("./client/js/*.js", ['bs-reload']);
 });
 
 // start our node server using foreman

@@ -8,32 +8,39 @@ angular.module('starter.directives', [])
     },
     link: function ($scope, $element, $attr) {
       function initialize() {
-        // creates an array of map styles
-        var styles = [
-          {
-            featureType: "poi.business",
-            elementType: "labels",
-            stylers: [
-              { visibility: "off" }
-            ]
-          }
-        ];
-
-        // Create a new StyledMapType object, passing it the array of styles,
-        // as well as the name to be displayed on the map type control.
-        var styledMap = new google.maps.StyledMapType(styles, {name: "Styled Map"});
-
         var mapOptions = {
           center: new google.maps.LatLng(37.7833, -122.4167),
           zoom: 16,
           mapTypeId: google.maps.MapTypeId.ROADMAP,
-          disableDefaultUI: true
+          mapTypeControl: false,
+          panControl: false,
+          zoomControl: false,
+          streetViewControl: false,
+          styles: [ {"featureType":"landscape.natural",
+                     "elementType":"geometry.fill",
+                     "stylers":[{"visibility":"on"},
+                                {"color":"#e0efef"}]},
+                    {"featureType":"poi",
+                     "elementType":"geometry.fill",
+                     "stylers":[{"visibility":"on"},
+                                {"hue":"#1900ff"},
+                                {"color":"#c0e8e8"}]},
+                    {"featureType":"road",
+                     "elementType":"geometry",
+                     "stylers":[{"lightness":100},
+                                {"visibility":"simplified"}]},
+                    {"featureType":"road",
+                     "elementType":"labels",
+                     "stylers":[{"visibility":"off"}]},
+                    {"featureType":"transit.line",
+                     "elementType":"geometry",
+                     "stylers":[{"visibility":"on"},
+                                {"lightness":700}]},
+                    {"featureType":"water",
+                     "elementType":"all",
+                     "stylers":[{"color":"#7dcdcd"}]}]
         };
         var map = new google.maps.Map($element[0], mapOptions);
-
-        //Associate the styled map with the MapTypeId and set it to display.
-        map.mapTypes.set('map_style', styledMap);
-        map.setMapTypeId('map_style');
   
         $scope.onCreate({map: map});
 
@@ -42,6 +49,11 @@ angular.module('starter.directives', [])
           e.preventDefault();
           return false;
         });
+
+        // Runs popover function on mouseover.  Better way to consolidate this functionality and popover?
+        google.maps.event.addDomListener(marker, 'mouseover', function(e) {
+          console.log('Pop up jaunt detail');
+        })
       }
 
       if (document.readyState === "complete") {
@@ -51,4 +63,5 @@ angular.module('starter.directives', [])
       }
     }
   }
-});
+})
+
