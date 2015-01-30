@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('MapCtrl', function($scope, $ionicLoading, $ionicActionSheet, $timeout, $ionicModal, Jaunts) {
+.controller('MapCtrl', function($scope, $ionicLoading, $ionicActionSheet, $timeout, $ionicModal, Jaunts, $q) {
 
   $scope.mapCreated = function(map) {
     $scope.map = map;
@@ -19,17 +19,18 @@ angular.module('starter.controllers', [])
 
     google.maps.event.addListener($scope.marker,'click', function (evt) {
       $scope.center = evt.latLng;
-      console.log("yeah center", $scope.center);
-      $scope.show($scope.index);
+      $scope.show(  $scope.index);
 
     });
 
 
     $scope.center = map.getCenter();
-    //$scope.centerOnMe();
-    //then call show(near);
-    $scope.show(0);
-    //$scope.displayJaunts($scope.jaunts);
+    $scope.centerOnMe()
+    .then(function (pos) {
+      $scope.center = map.getCenter();
+      $scope.show(0);
+    })
+
   };
 
   // $scope.displayJaunts = function(jaunts) {
@@ -60,23 +61,25 @@ angular.module('starter.controllers', [])
   // };
 
   $scope.centerOnMe = function () {
-    console.log("Centering");
-    if (!$scope.map) {
-      return;
-    }
+    return $q(function(resolve, reject) {
+      if (!$scope.map) {
+        reject('No map loaded');
+      }
 
-    $scope.loading = $ionicLoading.show({
-      content: 'Getting current location...',
-      showBackdrop: false
-    });
+      $scope.loading = $ionicLoading.show({
+        content: 'Getting current location...',
+        showBackdrop: false
+      });
 
-    navigator.geolocation.getCurrentPosition(function (pos) {
-      console.log('Got pos', pos);
-      $scope.map.setCenter(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
-      $scope.loading.hide();
-    }, function (error) {
-      alert('Unable to get location: ' + error.message);
-    });
+      navigator.geolocation.getCurrentPosition(function (pos) {
+        console.log('Got pos', pos);
+        $scope.map.setCenter(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
+        $ionicLoading.hide();
+        resolve(pos);
+      }, function (error) {
+        reject('Unable to get location: ' + error.message);
+      });
+    })
   };
   
   // adjust from global scope? Popover for new users?
@@ -124,7 +127,7 @@ angular.module('starter.controllers', [])
     } else if(index === 1){
       query.end_location = {
         coordinates : coordinates,
-        range: 1500
+        range: 1000
       }
     } else if(index === 2){
       console.log('do some stuff for choice 3');
@@ -275,8 +278,20 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('HomeCtrl', function($scope) {
+.controller('HomeCtrl', function($scope, $state) {
   $scope.settings = {
     enableFriends: true
   };
+
+  $scope.jauntTo = function () {
+    $state.go('tab.map');
+  };
+
+  $scope.jauntFrom = function () {
+    $state.go('tab.map');
+  }
+  $scope.explore = function () {
+    $state.go('tab.jaunts');
+  }
+
 });
