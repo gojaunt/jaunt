@@ -119,7 +119,7 @@ angular.module('starter.controllers', [])
     if(index === 0){
       query.start_location = {
         coordinates: coordinates,
-        range: 1500
+        range: 1000
       }
     } else if(index === 1){
       query.end_location = {

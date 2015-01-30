@@ -13,6 +13,8 @@ var reload = browserSync.reload;
 var shell = require('gulp-shell');
 var sh = require('shelljs');
 var when = require('gulp-if');
+var angularFilesort = require('gulp-angular-filesort');
+var inject = require('gulp-inject');
 
 
 // the paths to our app files
@@ -25,6 +27,17 @@ var paths = {
   test: ['specs/**/*.js'],
   sass: ['client/scss/**/*.scss']
 };
+
+// Inject ionic(angular) app into index.html
+gulp.task('index', function () {
+
+  var sources = gulp.src(['./client/www/js/**/*.js']).pipe(angularFilesort());
+
+  gulp.src('./client/www/index.html')
+    .pipe(inject(sources, {ignorePath: 'client/www', addRootSlash: false }))
+    .pipe(gulp.dest('./client/www'));
+
+});
 
 // Compile sass
 gulp.task('sass', function(done) {
@@ -64,8 +77,8 @@ gulp.task('karma', shell.task([
 
 gulp.task('watch', function () {
   gulp.watch("./client/scss/*.scss", ['sass'])
-  gulp.watch("./client/templates/*.html", ['bs-reload']);
-  gulp.watch("./client/js/*.js", ['bs-reload']);
+  gulp.watch("./client/templates/*.html", ['bs-reload', 'index']);
+  gulp.watch("./client/js/*.js", ['bs-reload', 'index']);
 });
 
 // start our node server using foreman
@@ -78,6 +91,6 @@ gulp.task('install', shell.task([
   'bower install'
 ]));
 
-gulp.task('default', ['sass', 'browser-sync', 'watch']);
+gulp.task('default', ['sass', 'index', 'browser-sync', 'watch']);
 
 gulp.task('deploy', ['start']);
