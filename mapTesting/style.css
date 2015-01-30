@@ -1,0 +1,35 @@
+#simplemodal-overlay {
+	background-color:#000;
+}
+#simplemodal-container {
+	background-color:#333; 
+	border:8px solid #444; 
+	padding:12px;
+}
+
+span.business {
+	font-size: 20px;
+	color: white;
+}
+
+input[type='radio'] + span label {
+	margin: auto;
+}
+
+input[type="radio"]:checked + span label {
+	font-weight: bold;
+	color: green;
+}
+
+#otherStop {
+	opacity: 0;
+	max-height: 0;
+	overflow: hidden;;
+}
+
+input[type="radio"]:checked ~ #otherStop {
+	opacity: 1;
+	max-height: 100px;
+	overflow: visible;
+}
+
