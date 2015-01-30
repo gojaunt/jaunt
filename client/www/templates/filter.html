@@ -6,6 +6,70 @@
     <div class="button button-clear" ng-click="modal.hide()"><span class="icon ion-close"></span></div>
   </ion-header-bar>
   <ion-content>
-    Hello, filter options will be placed here.  This should replace the action sheet at the bottom of the map view.
+    <div class="list">
+
+      <div class="item item-divider">
+        Duration
+      </div>
+
+      <div class="range">
+        
+        <input type="range" name="duration">
+        <i class="icon ion-clock"></i>
+      </div>
+
+      <div class="item item-divider">
+        Fancies
+      </div>
+
+      <ul>
+
+        <li class="item item-icon-left item-toggle">
+          <i class="icon ion-pizza"></i>
+           Food
+           <label class="toggle">
+             <input type="checkbox">
+             <div class="track">
+               <div class="handle"></div>
+             </div>
+           </label>
+        </li>
+
+        <li class="item item-icon-left item-toggle">
+          <i class="icon ion-beer"></i>
+           Drinks
+           <label class="toggle">
+             <input type="checkbox">
+             <div class="track">
+               <div class="handle"></div>
+             </div>
+           </label>
+        </li>
+
+        <li class="item item-icon-left item-toggle">
+          <i class="icon ion-ios7-paw"></i>
+           Activities
+           <label class="toggle">
+             <input type="checkbox">
+             <div class="track">
+               <div class="handle"></div>
+             </div>
+           </label>
+        </li>
+
+        <li class="item item-icon-left item-toggle">
+          <i class="icon ion-image"></i>
+           Sights
+           <label class="toggle">
+             <input type="checkbox">
+             <div class="track">
+               <div class="handle"></div>
+             </div>
+           </label>
+        </li>
+
+      </ul>
+
+    </div>
   </ion-content>
 </ion-modal-view>
