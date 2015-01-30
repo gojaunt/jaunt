@@ -12,7 +12,6 @@
  *
  */
 
-<<<<<<< HEAD:client/www/lib/ionic/js/ionic.js
 (function() {
 
 // Create global ionic obj and its namespaces
