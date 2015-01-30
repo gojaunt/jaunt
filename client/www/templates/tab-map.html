@@ -1,6 +1,11 @@
 <!-- jaunt-detail will eventually be displayed on map when hovering over a jaunt.  Clicking on jaunt-detail will lead to place-detail-->
 <ion-view view-title="Map">
 
+  <!-- filter -->
+  <ion-nav-buttons side="primary">
+    <a href="#" ng-click="openModal()"><button class="button button-icon icon ion-search">Filter</button></a>
+  </ion-nav-buttons>
+
   <!-- list view -->
   <ion-nav-buttons side="secondary">
     <a href="#/tab/jaunts"><button class="button button-icon icon ion-navicon">List</button></a>
