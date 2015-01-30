@@ -1,5 +1,8 @@
 # Jaunt
 
+![Jaunt](/client/www/img/jaunt500.png "Jaunt")
+
+
 Jaunt lets local explorers find walking adventures that fit their fancy.
 
 ## Team
