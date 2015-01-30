@@ -241,7 +241,6 @@ angular.module('starter.controllers', [])
       // Execute action
     });
 
-
 })
 
 .controller('JauntsCtrl', function($scope, Jaunts) {
