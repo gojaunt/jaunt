@@ -19,8 +19,9 @@ $(function(){
 
 //sends a post request to save jaunt object
   $('#save').click(function(){
-    var dataObj = JSON.stringify(jaunt);
-    $.post("/saveJaunt",dataObj, function(data){
+    // var dataObj = JSON.stringify(jaunt);
+    console.log(jaunt);
+    $.post("/saveJaunt",jaunt, function(data){
       data = JSON.parse(data);
     });
   });
@@ -80,26 +81,45 @@ function Init() {
 
     if(stopClicked){
       //prompt the user for input
-      var name = prompt("What is the name of the stop?");
-      var description = prompt("Please add a description.");
-      var photoURL = prompt("Please add a photoURL.");
-      var tags = prompt("please add tags");
-      var duration = prompt('How long did you stay there?');
-      var stopLocObj = {
-        coordinates: [longitude, latitude]
-      };
-      
-      //save the input in the jaunt object
-      var stopObj = {
-        name: name,
-        description: description,
-        photoURL: photoURL,
-        tags: tags,
-        duration: duration,
-        location: stopLocObj
-      };
-      jaunt.stops.push(stopObj);
-      console.log(jaunt);
+
+      //call a GET request while passing in the latLng of the stop location
+        //callback function should call a function that creates a popup list for user to select from
+        //the function called should return an object that contains the values necessary to create a stop obj
+        //this stopObj will be pushed into the jaunt.stops array
+        var latLngObj = {
+          latitude: latitude,
+          longitude: longitude
+        };
+      $.post("/getYelpData", latLngObj, function(data){
+        //data comes back as a JSON object with business names as the keys.
+        obtainStopInfo(data);
+
+        $("#submitBtn").click(function(){
+          var name = $('input[name=business]:checked')[0].id;
+          // var name = $('input[name=business]:checked')[0].id;
+          if(name === 'other'){
+            name = $('#otherText')[0].value;
+          }
+          var description = $('#myDescription')[0].value;
+          var photoURL = $('#myURL')[0].value;
+          var tags = $('#myTag')[0].value;
+          var duration = $('#myDuration')[0].value;
+          
+          //save the user input in an object
+          var stopInfoObj = {
+            name: name,
+            description: description,
+            photoURL: photoURL,
+            tags: tags,
+            duration: duration,
+            location: {coordinates:[longitude, latitude]}
+          };
+
+          jaunt.stops.push(stopInfoObj);
+          $.modal.close();
+          $('#modalForm').empty();
+        });
+      });
     }
   });
 }
@@ -190,13 +210,42 @@ var getDirections = function(reqObj){
     });
 };
 
+var obtainStopInfo = function(obj){
+  for(var key in obj){
+    $("#modalForm").append("<input type='radio' class='options' id='"+key+"' name='business'/>");
+    $("#modalForm").append("<span class='business'><label for='"+key+"'>"+obj[key].name+"</label></span>");
+    $("#modalForm").append("<br>");
+  }
+  $("#modalForm").append("<input type='radio' id='other' name='business'/>");
+  $("#modalForm").append("<span class='business'><label for='other'>Other</label></span>");
+  $("#modalForm").append("<br>");
+
+
+  $("#modalForm").append("<div id='otherStop'><input id='otherText' type='text' size='50' name='businessName'/></div>");
+  $("#modalForm").append("<br>");
+
+  $(document).ready(function(){
+    $('#other').change(function(){
+      $('#otherStop').show()
+    });
+    $('.options').change(function(){
+      $('#otherText').val("");
+      $('#otherStop').hide()
+    });
+  });
+
+  $("#modalForm").append("<p>Description: <textarea id='myDescription' name='description' cols=48 rows=4></textarea></p>");
+  $("#modalForm").append("<p>Photo URL: <input id='myURL' type='url' size='100'></input></p>");
+  $("#modalForm").append("<p>Tags: <input id='myTag' type='text' size='40'></input></p>");
+  $("#modalForm").append("<p>Duration: <input id='myDuration' type='text' size='10'></input></p>");
+  $("#modalForm").append("<br>");
+  $("#modalForm").append("<input id='submitBtn' type='button' value='Submit'> <input type='reset'>");
+
+  $.modal($("#modalDiv"), {
+    minHeight:400,
+    minWidth: 600
+  });
+};
 
 Init();
-
-/*$('button').click(function(){
-  var a = createPointToPoint(points);
-  var requestArr = createRequestObjArr(a);
-  getDirections(requestArr);
-  // console.log(requestArr);
-});*/
 });
