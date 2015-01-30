@@ -6,27 +6,27 @@
 
   <ion-content>
     <ion-list>
-      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="jaunt in jaunts" type="item-text-wrap" href="#/tab/jaunts/{{jaunt._id}}">
-        <img src="/img/jaunt-logo.png">
-        <h2>{{jaunt.meta.title}}</h2>
-        <!-- need to style all of this.  which items to keep? -->
-        <p>
-          <!-- style to be stars -->
-          <a href="#" class="subdued">{{jaunt.meta.rating}}</a>
-          <!-- votes -->
-          <a href="#" class="subdued">{{jaunt.meta.votes}}</a>
-          <!-- user -->
-          <a href="#" class="subdued">{{jaunt.meta.author}}</a>
-          <!-- distance -->
-          <a href="#" class="subdued">{{jaunt.distance.text}}</a>
-          <!-- duration -->
-          <a href="#" class="subdued">{{jaunt.duration.text}}</a>
-          <!-- tags -->
-          <a href="#" class="subdued" ng-repeat="tag in jaunt.meta.tags">{{tag}}</a>
-          <!-- overall category -->
-          <a href="#" class="subdued" ng-repeat="category in jaunt.meta.categories">{{category}}</a>
-        </p>
-        <p>Should jaunts have some description?</p>
+      <ion-item class="item-remove-animate item-thumbnail-left item-icon-right" ng-repeat="jaunt in jaunts" type="item-text-wrap" href="#/tab/jaunts/{{jaunt._id}}">
+        <img src="/img/jaunt-logo.png">  
+        <div class="row">
+          <div class="col">
+            <h3>{{jaunt.meta.title}}</h3>
+            <p>
+              <img src="/img/{{jaunt.meta.rating | number:0}}.png" style="width: 75px;">
+              <small>via {{jaunt.meta.votes}} votes</small>
+            </p>
+            <p>
+              <small>
+                <span class="ion-clock">
+                  {{jaunt.duration.text}} fancying
+                </span>
+                <span ng-repeat="tag in jaunt.meta.tags">
+                  {{tag}}
+                </span>
+              </small>
+            </p>
+          </div>
+        </div>
 
         <i class="icon ion-chevron-right icon-accessory"></i>
       </ion-item>
