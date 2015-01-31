@@ -2,63 +2,91 @@ angular.module('starter.controllers', [])
 
 .controller('MapCtrl', function($scope, $ionicLoading, $ionicActionSheet, $timeout, $ionicModal, Jaunts, $q) {
 
-  $scope.mapCreated = function(map) {
-    $scope.map = map;
+  $scope.initialize = function () {
 
+    var mapOptions = {
+      center: new google.maps.LatLng(37.7833, -122.4167),
+      zoom: 14,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      draggableCursor:'crosshair',
+      mapTypeControl: false,
+      panControl: false,
+      zoomControl: false,
+      streetViewControl: false,
+      styles: [{"featureType":"poi",
+                "elementType": "labels",
+                "stylers":[{"visibility":"off"}]},
+                {"featureType":"landscape.natural",
+                 "elementType":"geometry.fill",
+                 "stylers":[{"visibility":"on"},
+                            {"color":"#e0efef"}]},
+                {"featureType":"poi",
+                 "elementType":"geometry.fill",
+                 "stylers":[{"visibility":"on"},
+                            {"color": "#C5E3BF"}]},
+                {"featureType":"road",
+                 "elementType":"geometry",
+                 "stylers":[{"lightness":100},
+                            {"visibility":"simplified"}]},
+                {"featureType":"road",
+                 "elementType":"geometry.fill",
+                 "stylers":[{"color": "#D1D1B8"}]},
+                {"featureType":"transit.line",
+                 "elementType":"geometry",
+                 "stylers":[{"visibility":"on"},
+                            {"lightness":700}]},
+                {"featureType":"water",
+                 "elementType":"all",
+                 "stylers":[{"color":"#C6E2FF"}]}]
+    };
+
+    var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+    $scope.map = map;    
+    $scope.mapCreated();
+
+  }
+
+  // google.maps.event.addDomListener(window, 'load', initialize);
+
+
+
+  $scope.mapCreated = function() {
     $scope.polys = [];
     $scope.markers = [];
     $scope.infowindows = [];
     $scope.index = 0;
 
+    var crossHairs = new google.maps.MarkerImage('img/crossHair.png',
+            // This marker is 128 pixels wide by 128 pixels tall.
+            null, 
+            // The origin for this image is 0,0.
+            new google.maps.Point(0,0),
+            // The anchor for this image is the base of the flagpole at 0,32.
+            new google.maps.Point(64, 64)
+        );
+
     $scope.marker = new google.maps.Marker({
-        map: map,
-        icon: 'img/cross-hairs.gif',
+        map: $scope.map,
+        icon: crossHairs,
     });
-    $scope.marker.bindTo('position', map, 'center'); 
+    $scope.marker.bindTo('position', $scope.map, 'center'); 
 
 
     google.maps.event.addListener($scope.marker,'click', function (evt) {
       $scope.center = evt.latLng;
       $scope.show(  $scope.index);
-
     });
 
 
-    $scope.center = map.getCenter();
+    $scope.center = $scope.map.getCenter();
     $scope.centerOnMe()
     .then(function (pos) {
-      $scope.center = map.getCenter();
+      $scope.center = $scope.map.getCenter();
       $scope.show(0);
     })
 
   };
-
-  // $scope.displayJaunts = function(jaunts) {
-  //   var infowindow = new google.maps.InfoWindow();
-
-  //   var marker, i;
-
-  //   for (i = 0; i < jaunts.length; i++) {
-  //     marker = new google.maps.Marker({
-  //       position: new google.maps.LatLng(jaunts[i].location[0], jaunts[i].location[1]),
-  //       map: $scope.map
-  //     });
-
-  //     // opens clickable infowindow on hover
-  //     google.maps.event.addListener(marker, 'click', (function(marker, i) {
-  //       return function() {
-  //         var contentString = 
-  //               '<a class="infoWindow" href="#/tab/jaunts/' + jaunts[i].id + '"><div>' + jaunts[i].name + ': ' + jaunts[i].rating
-  //              +'</div></a>';
-
-  //         infowindow.setContent(contentString);
-  //         infowindow.open($scope.map, marker);
-  //       }
-  //     })(marker, i));
-
-  //   }
-
-  // };
 
   $scope.centerOnMe = function () {
     return $q(function(resolve, reject) {
@@ -170,25 +198,6 @@ angular.module('starter.controllers', [])
     }
   }
 
-  // var showPins = function(jaunts){
-  //   console.log('jaunts in showPins is', jaunts);
-  //   $scope.markers = []
-  //   for(var i = 0; i < jaunts.length; i++){
-  //     for(var j = 0; j < jaunts[i].stops.length; j++){
-  //       $scope.markers.push(new google.maps.Marker({
-  //       position: new google.maps.LatLng(jaunts[i].stops[j].location.coordinates[1], jaunts[i].stops[j].location.coordinates[0]),
-  //       map: $scope.map
-  //     }));
-  //     }
-      
-  //   }
-  // }
-
-  // var deletePins = function(){
-  //   removeFromMap($scope.markers);
-  //   $scope.markers = [];
-  // }
-
   var addToMap = function(items){
     for(var i = 0; i < items.length; i++){
       items[i].setMap($scope.map);
@@ -240,6 +249,11 @@ angular.module('starter.controllers', [])
     $scope.$on('modal.removed', function() {
       // Execute action
     });
+
+
+    if (!$scope.map) {
+      $scope.initialize();
+    }
 
 })
 

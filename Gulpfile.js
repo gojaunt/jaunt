@@ -93,4 +93,4 @@ gulp.task('install', shell.task([
 
 gulp.task('default', ['sass', 'index', 'browser-sync', 'watch']);
 
-gulp.task('deploy', ['start']);
+gulp.task('deploy', ['sass', 'index']);
