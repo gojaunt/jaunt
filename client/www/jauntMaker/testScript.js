@@ -22,9 +22,11 @@ $(function(){
 
     var title = prompt("What is the name of the Jaunt?");
     var description = prompt("Please add a description.");
-    var categories = prompt("Please give some categories.");
-    var tags = prompt("please add tags");
+    var categories = prompt("Please give some categories (separated by commas)");
+    var tags = prompt("Please add tags (separated by commas)");
     var author = prompt('What\'s your name?');
+
+    console.log(jaunt);
 
     jaunt.meta = {
       title : title,
@@ -37,12 +39,21 @@ $(function(){
       tags : tags.split(', ')
     };
 
-    jaunt = formatJaunt(jaunt);
-    var dataObj = JSON.stringify(jaunt);
-    console.log(dataObj);
-    // $.post("/saveJaunt", dataObj, function(data){
-    //   data = JSON.parse(data);
-    // });
+
+    var data = formatJaunt(jaunt);
+    
+    $.ajax({
+      url: "/api/jaunts",
+        type: "POST",
+        data: JSON.stringify(jaunt),
+        contentType: 'application/json',
+        success: function (data) {
+          console.log('saved!', data);
+        },
+        error: function (error) {
+          console.log('error!', error);
+        }
+    });
   });
 
   //gets jaunt data from file
@@ -100,26 +111,45 @@ function Init() {
 
     if(stopClicked){
       //prompt the user for input
-      var name = prompt("What is the name of the stop?");
-      var description = prompt("Please add a description.");
-      var photoURL = prompt("Please add a photoURL.");
-      var tags = prompt("please add tags");
-      var duration = prompt('How long did you stay there?');
-      var stopLocObj = {
-        coordinates: [longitude, latitude]
-      };
-      
-      //save the input in the jaunt object
-      var stopObj = {
-        name: name,
-        description: description,
-        photoURL: photoURL,
-        tags: tags,
-        duration: duration,
-        location: stopLocObj
-      };
-      jaunt.stops.push(stopObj);
-      console.log(jaunt);
+
+      //call a GET request while passing in the latLng of the stop location
+        //callback function should call a function that creates a popup list for user to select from
+        //the function called should return an object that contains the values necessary to create a stop obj
+        //this stopObj will be pushed into the jaunt.stops array
+        var latLngObj = {
+          latitude: latitude,
+          longitude: longitude
+        };
+      $.post('/api/yelp', latLngObj, function(data){
+        //data comes back as a JSON object with business names as the keys.
+        obtainStopInfo(data);
+
+        $("#submitBtn").click(function(){
+          var name = $('input[name=business]:checked')[0].id;
+          // var name = $('input[name=business]:checked')[0].id;
+          if(name === 'other'){
+            name = $('#otherText')[0].value;
+          }
+          var description = $('#myDescription')[0].value;
+          var photoURL = $('#myURL')[0].value;
+          var tags = $('#myTag')[0].value;
+          var duration = $('#myDuration')[0].value;
+          
+          //save the user input in an object
+          var stopInfoObj = {
+            name: name,
+            description: description,
+            photoURL: photoURL,
+            tags: tags,
+            duration: duration,
+            location: {coordinates:[longitude, latitude]}
+          };
+
+          jaunt.stops.push(stopInfoObj);
+          $.modal.close();
+          $('#modalForm').empty();
+        });
+      });
     }
   });
 }
@@ -171,8 +201,8 @@ var buildPath = function(result){
     newStep.distance.text = stepper[i].distance.text;
     newStep.distance.value = stepper[i].distance.value;
     newStep.duration = {};
-    newStep.duration.text = stepper[i].duration.text;
-    newStep.duration.value = stepper[i].duration.value;
+    newStep.duration.text = stepper[i].distance.text;
+    newStep.duration.value = stepper[i].distance.value;
     newStep.end_location = {};
     newStep.end_location.lat = stepper[i].end_location.lat();
     newStep.end_location.lng = stepper[i].end_location.lng();
@@ -210,6 +240,43 @@ var getDirections = function(reqObj){
     });
 };
 
+var obtainStopInfo = function(obj){
+  for(var key in obj){
+    $("#modalForm").append("<input type='radio' class='options' id='"+key+"' name='business'/>");
+    $("#modalForm").append("<span class='business'><label for='"+key+"'>"+obj[key].name+"</label></span>");
+    $("#modalForm").append("<br>");
+  }
+  $("#modalForm").append("<input type='radio' id='other' name='business'/>");
+  $("#modalForm").append("<span class='business'><label for='other'>Other</label></span>");
+  $("#modalForm").append("<br>");
+
+
+  $("#modalForm").append("<div id='otherStop'><input id='otherText' type='text' size='50' name='businessName'/></div>");
+  $("#modalForm").append("<br>");
+
+  $(document).ready(function(){
+    $('#other').change(function(){
+      $('#otherStop').show()
+    });
+    $('.options').change(function(){
+      $('#otherText').val("");
+      $('#otherStop').hide()
+    });
+  });
+
+  $("#modalForm").append("<p>Description: <textarea id='myDescription' name='description' cols=48 rows=4></textarea></p>");
+  $("#modalForm").append("<p>Photo URL: <input id='myURL' type='url' size='100'></input></p>");
+  $("#modalForm").append("<p>Tags: <input id='myTag' type='text' size='40'></input></p>");
+  $("#modalForm").append("<p>Duration (s): <input id='myDuration' type='text' size='10'></input></p>");
+  $("#modalForm").append("<br>");
+  $("#modalForm").append("<input id='submitBtn' type='button' value='Submit'> <input type='reset'>");
+
+  $.modal($("#modalDiv"), {
+    minHeight:400,
+    minWidth: 600
+  });
+};
+
 var formatJaunt = function (newJaunt) {
 
   newJaunt.distance = {
@@ -228,6 +295,7 @@ var formatJaunt = function (newJaunt) {
   newJaunt.end_location = {
     coordinates: [newJaunt.end_location.lng, newJaunt.end_location.lat]
   };
+
 
 
   // Create the bounds of the Jaunt
@@ -285,11 +353,21 @@ var formatJaunt = function (newJaunt) {
       newJaunt.stops[i].tags = newJaunt.stops[i].tags.split(', ');
     }
     newJaunt.meta.tags = newJaunt.meta.tags.concat(newJaunt.stops[i].tags);
+
+    // Reformat the stop tags to be lowercased;
+    newJaunt.stops[i].tags = newJaunt.stops[i].tags.map(function (item) {
+      return item.toLowerCase();
+    })
   }
+
+
+  // Reformat the meta tags to be lowercased
+  newJaunt.meta.tags = newJaunt.meta.tags.map(function (item) {
+    return item.toLowerCase();
+  })
 
   return newJaunt;
 }
 
 Init();
-
 });
