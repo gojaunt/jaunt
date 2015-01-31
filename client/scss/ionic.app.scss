@@ -28,10 +28,6 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 @import "home";
 @import "map";
 
-body {
-  cursor: url('http://ionicframework.com/img/finger.png'), auto;
-}
-
 .background, .background .pane, .background .item, .background .item-complex .item-content{
     background-color: $bgcolor;
 }

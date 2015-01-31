@@ -47,29 +47,6 @@ angular.module('starter.controllers', [])
     $scope.infowindows = [];
     $scope.index = 0;
 
-    var crossHairs = new google.maps.MarkerImage('img/crossHair.png',
-            // This marker is 128 pixels wide by 128 pixels tall.
-            null, 
-            // The origin for this image is 0,0.
-            new google.maps.Point(0,0),
-            // The anchor for this image is the base of the flagpole at 0,32.
-            new google.maps.Point(64, 64)
-        );
-
-    $scope.marker = new google.maps.Marker({
-        map: $scope.map,
-        icon: crossHairs,
-    });
-    $scope.marker.bindTo('position', $scope.map, 'center'); 
-
-
-    google.maps.event.addListener($scope.marker,'click', function (evt) {
-      $scope.center = evt.latLng;
-      $scope.show(  $scope.index);
-    });
-
-
-
     $scope.centerOnMe()
     .then(function (pos) {
       $scope.center = $scope.map.getCenter();
@@ -77,6 +54,11 @@ angular.module('starter.controllers', [])
     })
 
   };
+
+  $scope.clickCrosshairs = function (){
+    $scope.center = $scope.map.getCenter();
+    $scope.show(  $scope.index);
+  }
 
   $scope.centerOnMe = function () {
     return $q(function(resolve, reject) {
@@ -256,12 +238,37 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('JauntsCtrl', function($scope, Jaunts) {
+.controller('JauntsCtrl', function($scope, Jaunts, $ionicModal) {
   
   // empty obj as query since query not set up yet
   Jaunts.selectJaunts({}).then(function(data){
     $scope.jaunts = data.data;
   });
+
+  $ionicModal.fromTemplateUrl('templates/filter.html', {
+      scope: $scope,
+      animation: 'slide-in-up'
+    }).then(function(modal) {
+      $scope.modal = modal;
+    });
+    $scope.openModal = function() {
+      $scope.modal.show();
+    };
+    $scope.closeModal = function() {
+      $scope.modal.hide();
+    };
+    //Cleanup the modal when we're done with it!
+    $scope.$on('$destroy', function() {
+      $scope.modal.remove();
+    });
+    // Execute action on hide modal
+    $scope.$on('modal.hidden', function() {
+      // Execute action
+    });
+    // Execute action on remove modal
+    $scope.$on('modal.removed', function() {
+      // Execute action
+    });
 })
 
 .controller('JauntDetailCtrl', function($scope, $stateParams, Jaunts) {
