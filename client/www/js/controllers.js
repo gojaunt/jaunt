@@ -40,18 +40,8 @@ angular.module('starter.controllers', [])
                  "stylers":[{"color":"#C6E2FF"}]}]
     };
 
-    var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+    $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);  
 
-    $scope.map = map;    
-    $scope.mapCreated();
-
-  }
-
-  // google.maps.event.addDomListener(window, 'load', initialize);
-
-
-
-  $scope.mapCreated = function() {
     $scope.polys = [];
     $scope.markers = [];
     $scope.infowindows = [];
@@ -79,7 +69,7 @@ angular.module('starter.controllers', [])
     });
 
 
-    $scope.center = $scope.map.getCenter();
+
     $scope.centerOnMe()
     .then(function (pos) {
       $scope.center = $scope.map.getCenter();
@@ -94,9 +84,11 @@ angular.module('starter.controllers', [])
         reject('No map loaded');
       }
 
-      $scope.loading = $ionicLoading.show({
-        content: 'Getting current location...',
-        showBackdrop: false
+      $ionicLoading.show({
+        template: '<i class="ion-loading-c"></i><div>Getting Location</div>',
+        animation: 'fade-in',
+        showBackdrop: false,
+        maxWidth: 200
       });
 
       navigator.geolocation.getCurrentPosition(function (pos) {
@@ -141,6 +133,7 @@ angular.module('starter.controllers', [])
 
   //calls Jaunts.getAllPolys to receive an array of polylines; loops through to attach to map
   $scope.show = function(index){
+
     var query = {};
     var coordinates = [$scope.center.lng(), $scope.center.lat()];
     removeFromMap($scope.polys);
@@ -162,24 +155,42 @@ angular.module('starter.controllers', [])
     }
 
     //the db call
+
+    $ionicLoading.show({
+      template: '<i class="ion-loading-c"></i><div>Finding Jaunts</div>',
+      animation: 'fade-in',
+      showBackdrop: false,
+      maxWidth: 200,
+    });
+
+
+    hideMarkers();
+
     Jaunts.selectJaunts(query).then(function(data){
+      setTimeout( $ionicLoading.hide, 500);
+
       $scope.jaunts = data.data;
-      console.log('scope jaunts', $scope.jaunts);
       $scope.polys = Jaunts.getAllPolys($scope.jaunts);
 
       addToMap($scope.polys);
-      displayMeta();
+      showMarkers();
       
     });
   };
 
-  var displayMeta = function(){
+
+  var hideMarkers = function(){
     for(var i = 0; i < $scope.infowindows.length; i++){
       $scope.infowindows[i].close();
+      $scope.markers[i].setMap(null);
     }
-    $scope.markers = [];
-    for(var i = 0; i < $scope.jaunts.length; i++){
+    $scope.markers.length = 0;
+    $scope.infowindows.length = 0;
+  }
 
+  var showMarkers = function(){
+
+    for(var i = 0; i < $scope.jaunts.length; i++){
       var contentString = '<div class="infoW">'+
             $scope.jaunts[i].meta.title +
             '</div>';
@@ -188,20 +199,21 @@ angular.module('starter.controllers', [])
             content: contentString
         });
 
-        $scope.markers.push(new google.maps.Marker({
+        var marker = new google.maps.Marker({
             position: new google.maps.LatLng($scope.jaunts[i].start_location.coordinates[1],$scope.jaunts[i].start_location.coordinates[0]),
             map: $scope.map,
             title: $scope.jaunts[i].meta.title
-        }));
-        infowindow.open($scope.map,$scope.markers[i]);
+        });
+        $scope.markers.push(marker);
         $scope.infowindows.push(infowindow);
+
+        infowindow.open($scope.map, marker);
     }
   }
 
   var addToMap = function(items){
     for(var i = 0; i < items.length; i++){
       items[i].setMap($scope.map);
-      addInfoWindowToMap(items[i]);
     }
   };
 
@@ -210,19 +222,6 @@ angular.module('starter.controllers', [])
       items[i].setMap(null);
     }
   };
-  //sets info window when jaunt added to map.  NOTE: need jaunt meta data to be passed in getAllPolys for this to work
-  var addInfoWindowToMap = function(polys){
-    var infowindow = new google.maps.InfoWindow({
-      map: $scope.map
-    });
-
-    google.maps.event.addListener(polys, 'click', function(e) {
-      infowindow.setContent('<a><div>' + $scope.jaunts[0].title + '</div></a>');
-      infowindow.setPosition(e.latLng);
-      infowindow.open($scope.map);
-    });
-  }
-
 
   // add modal for filtering
   $ionicModal.fromTemplateUrl('templates/filter.html', {
