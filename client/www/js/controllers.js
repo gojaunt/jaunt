@@ -84,7 +84,7 @@ angular.module('starter.controllers', [])
     })
   };
   
-  // adjust from global scope? Popover for new users?
+  /*// adjust from global scope? Popover for new users?
   $scope.search = 'jaunts near me!';
 
   // adds Action Sheet for simple search  
@@ -110,7 +110,7 @@ angular.module('starter.controllers', [])
     $timeout(function() {
       hideSearch();
     }, 3000);
-  };
+  };*/
 
 
   //calls Jaunts.getAllPolys to receive an array of polylines; loops through to attach to map
