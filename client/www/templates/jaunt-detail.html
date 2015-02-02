@@ -14,19 +14,31 @@
   <ion-content>
     <div class="list card">
 
-      <div class="item item-avatar">
-        <img ng-src="/img/jaunt-logo.png">
-        <h2>{{jaunt.meta.title}}</h2>
-        <p>
-          <a href="#" class="subdued">{{jaunt.meta.rating}}</a>
-          <a href="#" class="subdued" ng-repeat="tag in jaunt.meta.tags">{{tag}}</a>
-        </p>
+      <div class="item row">
+
+        <div class="col">
+          <h2>{{jaunt.meta.title}}</h2>
+          <p>
+            <img src="/img/{{jaunt.meta.rating | number:0}}.png" style="width: 75px;">
+            <small>via {{jaunt.meta.votes}} votes</small>
+          </p>
+        </div>
+
+        <div class="col col-20 col-center">
+          <span class="ion-clock">
+            {{jaunt.duration.text}}
+          </span>
+        </div>
       </div>
 
       <div class="item item-body">
         <img class="full-image" ng-src="/img/jaunt-logo.png">
         <p>
-          Should jaunts have some description?
+          Fancy: 
+          <span ng-repeat="tag in jaunt.meta.tags">
+            {{tag}},
+          </span>
+           fun stuff
         </p>
       </div>
 
