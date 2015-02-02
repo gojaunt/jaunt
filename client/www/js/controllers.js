@@ -46,6 +46,8 @@ angular.module('starter.controllers', [])
     $scope.markers = [];
     $scope.infowindows = [];
     $scope.index = 0;
+    $scope.query = {};  //user queries
+    $scope.queryObj = {}; //sent to the db
 
     $scope.centerOnMe()
     .then(function (pos) {
@@ -134,6 +136,10 @@ angular.module('starter.controllers', [])
       }
     } else if(index === 2){
       console.log('do some stuff for choice 3');
+    }
+
+    for(var key in $scope.queryObj){
+      query[key] = $scope.queryObj[key];
     }
 
     //the db call
@@ -287,6 +293,52 @@ angular.module('starter.controllers', [])
     if (!$scope.map) {
       $scope.initialize();
     }
+
+  $scope.buildQuery = function(){
+    $scope.queryObj = {};
+    
+    $scope.modal.hide();
+    if($scope.query.tags){
+      var mytags = $scope.query.tags.split(',');
+      for(var i = 0; i < mytags.length; i++){
+        mytags[i] = mytags[i].toLowerCase();
+      }
+      $scope.queryObj.tags =  mytags;
+      
+    }
+    if($scope.query.duration){
+      var duration = {max: $scope.query.duration};
+      $scope.queryObj.duration = duration;
+    }
+    if($scope.query.food || $scope.query.drinks || $scope.query.activities || $scope.query.sights){
+      $scope.queryObj.categories = [];
+
+      if($scope.query.food){
+        $scope.queryObj.categories.push('food');
+      }
+      if($scope.query.drinks){
+        $scope.queryObj.categories.push('drinks');
+      }
+      if($scope.query.activities){
+        $scope.queryObj.categories.push('activities');
+      }
+      if($scope.query.sights){
+        $scope.queryObj.categories.push('sights');
+      }
+    }
+
+    console.log($scope.queryObj);
+    $scope.show($scope.index);
+
+  }  
+
+  $scope.clearFilter = function(){
+    $scope.queryObj = {};
+    $scope.modal.hide();
+    $scope.query = {};
+    $scope.show($scope.index);
+
+  }  
 
 })
 

@@ -8,7 +8,7 @@
   <ion-content>
       
 
-   
+   <ng-form>
 
     <div class="list">
 
@@ -17,17 +17,17 @@
 
       <label class="item item-input">
         <i class="icon ion-search placeholder-icon"></i>
-        <input type="search" placeholder="Tags...">
+        <input type="search" placeholder="Tags..." ng-model="query.tags">
       </label>
 
 
       <div class="item item-divider">
-        Duration
+        Duration {{query.duration/60/60}} Hours
       </div>
 
       <div class="range">
         
-        <input type="range" name="duration">
+        <input type="range" name="duration" ng-model="query.duration" min=0 value=18000 max=36000 step=900>
         <i class="icon ion-clock"></i>
       </div>
 
@@ -41,7 +41,7 @@
           <i class="icon ion-pizza"></i>
            Food
            <label class="toggle">
-             <input type="checkbox">
+             <input type="checkbox" ng-model="query.food">
              <div class="track">
                <div class="handle"></div>
              </div>
@@ -52,7 +52,7 @@
           <i class="icon ion-beer"></i>
            Drinks
            <label class="toggle">
-             <input type="checkbox">
+             <input type="checkbox" ng-model="query.drinks">
              <div class="track">
                <div class="handle"></div>
              </div>
@@ -63,7 +63,7 @@
           <i class="icon ion-ios7-paw"></i>
            Activities
            <label class="toggle">
-             <input type="checkbox">
+             <input type="checkbox" ng-model="query.activities">
              <div class="track">
                <div class="handle"></div>
              </div>
@@ -74,7 +74,7 @@
           <i class="icon ion-image"></i>
            Sights
            <label class="toggle">
-             <input type="checkbox">
+             <input type="checkbox" ng-model="query.sights">
              <div class="track">
                <div class="handle"></div>
              </div>
@@ -83,9 +83,15 @@
 
       </ul>
 
-      <button class="button button-block button-large button-positive">
+      <button class="button button-block button-large button-positive" ng-click="buildQuery()">
         Filter Jaunts
       </button>
+
+      <button class="button button-block button-large button-positive" ng-click="clearFilter()">
+        Clear Filter
+      </button>
+
+    </ng-form>
          
 
 
