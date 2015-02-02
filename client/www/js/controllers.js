@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('MapCtrl', function($scope, $ionicLoading, $ionicActionSheet, $timeout, $ionicModal, Jaunts, $q) {
+.controller('MapCtrl', function($scope, $ionicLoading, $ionicActionSheet, $timeout, $ionicModal, Jaunts, $q, $rootScope) {
 
   $scope.initialize = function () {
 
@@ -152,6 +152,8 @@ angular.module('starter.controllers', [])
       setTimeout( $ionicLoading.hide, 500);
 
       $scope.jaunts = data.data;
+      //places on rootscope to persist across controllers
+      $rootScope.jaunts = data.data;
       $scope.polys = Jaunts.getAllPolys($scope.jaunts);
 
       addToMap($scope.polys);
@@ -251,12 +253,8 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('JauntsCtrl', function($scope, Jaunts, $ionicModal) {
-  
-  // empty obj as query since query not set up yet
-  Jaunts.selectJaunts({}).then(function(data){
-    $scope.jaunts = data.data;
-  });
+.controller('JauntsCtrl', function($scope, Jaunts, $ionicModal, $rootScope) {
+
 
   $ionicModal.fromTemplateUrl('templates/filter.html', {
       scope: $scope,
@@ -284,24 +282,14 @@ angular.module('starter.controllers', [])
     });
 })
 
-.controller('JauntDetailCtrl', function($scope, $stateParams, Jaunts) {
-  // need to refactor.  code used in JauntsCtrl and PlaceDetailCtrl as well.  Central location for jaunts query?
-  // empty obj as query since query not set up yet
-  Jaunts.selectJaunts({}).then(function(data){
-    $scope.jaunts = data.data;
+.controller('JauntDetailCtrl', function($scope, $stateParams, Jaunts, $rootScope) {
 
-    $scope.jaunt = Jaunts.getJaunt($scope.jaunts, $stateParams.jauntId);
-  });
+  $scope.jaunt = Jaunts.getJaunt($rootScope.jaunts, $stateParams.jauntId);
 })
 
-.controller('PlaceDetailCtrl', function($scope, $stateParams, Jaunts) {
-  // need to refactor.  code used in JauntsCtrl and JauntDetailCtrl as well.  Central location for jaunts query?
-  // empty obj as query since query not set up yet
-  Jaunts.selectJaunts({}).then(function(data){
-    $scope.jaunts = data.data;
+.controller('PlaceDetailCtrl', function($scope, $stateParams, Jaunts, $rootScope) {
 
-    $scope.stop = Jaunts.getStop($scope.jaunts, $stateParams.jauntId, $stateParams.placeId);
-  });
+  $scope.stop = Jaunts.getStop($rootScope.jaunts, $stateParams.jauntId, $stateParams.placeId);
 })
 
 .controller('AccountCtrl', function($scope) {
