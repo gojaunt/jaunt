@@ -7,6 +7,7 @@ module.exports = function (app, express) {
   // Express 4 allows us to use multiple routers with their own configurations
   var userRouter = express.Router();
   var jauntRouter = express.Router();
+  var yelpRouter = express.Router();
 
   app.use(morgan('dev'));
   app.use(bodyParser.urlencoded({extended: false}));
@@ -16,6 +17,8 @@ module.exports = function (app, express) {
 
 
   app.use('/api/users', userRouter); // use user router for all user request
+  app.use('/api/yelp', yelpRouter);
+
 
   // authentication middleware used to decode token and made available on the request
   //app.use('/api/links', helpers.decode);
@@ -27,4 +30,5 @@ module.exports = function (app, express) {
   // inject our routers into their respective route files
   require('../users/userRoutes.js')(userRouter);
   require('../jaunts/jauntRoutes.js')(jauntRouter);
+  require('../yelp/yelpRoutes.js')(yelpRouter);
 };

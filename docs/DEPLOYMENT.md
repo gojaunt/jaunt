@@ -22,6 +22,15 @@ There are three possible values of NODE_ENV - production, localTest, and local. 
 
 The MONOGLOLAB_URI variable is the URL of the mongoLab DB that the application connects to. You can find the username and password for the variable in the mongoLab account, or in the Application Keys document (NOT hosted in the project). Be VERY careful with this and any sensitive information - even one reference to it in any committed code will require cleaning up the commit of the references and creating new database credentials. DON'T DO IT!
 
+The Jaunt Maker utility is integrated with Yelp. In order to utilize the Yelp functionality, four Yelp API keys must also be set in the .env file.
+
+```sh
+YELP_CONSUMER_KEY=<REPLACE WITH PROPER KEY>
+YELP_CONSUMER_SECRET=<REPLACE WITH PROPER KEY>
+YELP_TOKEN=<REPLACE WITH PROPER KEY>
+YELP_SECRET=<REPLACE WITH PROPER KEY>
+```
+
 ---
 
 The Jaunt server is run locally using foreman - this simulates the environment variables on the heroku deployment server by reading our .env file and running a task described in the Procfile ('local' for a local deployment). To run Jaunt, first install foreman globally, the easiest way being to install the [Heroku toolkit](https://toolbelt.heroku.com/).

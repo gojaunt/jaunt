@@ -1,5 +1,4 @@
 var Jaunt = require('./jauntModel.js');
-var test = require('./test.js');
 var query = require('../utils/queryUtils.js');
 var Q = require('q');
 
