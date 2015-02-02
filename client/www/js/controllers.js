@@ -174,8 +174,21 @@ angular.module('starter.controllers', [])
 
     for(var i = 0; i < $scope.jaunts.length; i++){
       var contentString = '<div class="infoW">'+
+            '<a href="/#/tab/jaunts/' +
+            $scope.jaunts[i]._id +
+            '">' +
+            '<h5 class="title">' +
             $scope.jaunts[i].meta.title +
-            '</div>';
+            '</h5>' +
+            '<img src="/img/' + 
+            Math.round($scope.jaunts[i].meta.rating) + 
+            '.png" class="rating"' + 
+            '>' +
+            '<small> via ' +
+            $scope.jaunts[i].meta.votes +
+            ' votes</small>' +
+            '</a>' +
+            '</div>' /* closes infoW container*/;
 
         var infowindow = new google.maps.InfoWindow({
             content: contentString

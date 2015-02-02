@@ -21,3 +21,24 @@
   -ms-transform: translate(-64px, -64px);
   z-index: 10;
 }
+
+.infoW {
+  width: 200px;
+}
+.infoW a {
+  text-decoration: none;
+}
+.infoW a:link {
+  color: #000000;
+}
+.infoW a:visited {
+ color: #000000; 
+}
+.infoW .title {
+  border-bottom: 2px solid #f8f8f8;
+  padding-bottom: 2.5px;
+  margin-bottom: 2.5px;
+}
+.infoW .rating {
+  width: 75px;
+}
