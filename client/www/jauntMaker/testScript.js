@@ -10,15 +10,23 @@ $(function(){
 
   //changes the boolean value of 'stopClicked' to indicate whether button was clicked
   // true means button has been clicked
+  $('#route').css('color', 'orange');
+  
   $('#stop').click(function(){
+    $('button').css('color', 'black');
+    $('#stop').css('color', 'orange');
     stopClicked = true;
   });
   $('#route').click(function(){
+    $('button').css('color', 'black');
+    $('#route').css('color', 'orange');
     stopClicked = false;
   });
 
 //sends a post request to save jaunt object
   $('#save').click(function(){
+    $('button').css('color', 'black');
+    $('#save').css('color', 'orange');
 
     var title = prompt("What is the name of the Jaunt?");
     var description = prompt("Please add a description.");
@@ -56,13 +64,6 @@ $(function(){
     });
   });
 
-  //gets jaunt data from file
-  $('#getJaunts').click(function(){
-    $.get("/getJaunts", function(data){
-      //data comes back as a JSON object.
-      console.log(data);
-    });
-  });
 
   //create an empty array where jaunt stops can be stored
   jaunt.stops = [];
