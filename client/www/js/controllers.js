@@ -50,7 +50,7 @@ angular.module('starter.controllers', [])
     $scope.centerOnMe()
     .then(function (pos) {
       $scope.center = $scope.map.getCenter();
-      $scope.show(0);
+      $scope.show($scope.index);
     })
 
   };
@@ -125,15 +125,13 @@ angular.module('starter.controllers', [])
     if(index === 0){
       query.start_location = {
         coordinates: coordinates,
-        range: 1000
+        range: 1500
       }
     } else if(index === 1){
       query.end_location = {
         coordinates : coordinates,
-        range: 1000
+        range: 1500
       }
-    } else if(index === 2){
-      console.log('do some stuff for choice 3');
     }
 
     //the db call
