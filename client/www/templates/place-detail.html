@@ -1,8 +1,21 @@
 <ion-view view-title="{{stop.name}}">
   <ion-content class="padding">
-    <p>
-      {{stop.description}}
-    </p>
+
+
+  <div class="list card">
+
+
+    <div class="item item-body">
+      
+      <h2>{{stop.name}}</h2>
+      <p>{{stop.description}}</p>
+    </div>
+
+    <div class="item item-image">
+      <img ng-src="{{stop.photoUrl}}">
+    </div>
+
+  </div>
     
   </ion-content>
 
