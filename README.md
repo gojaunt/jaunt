@@ -68,3 +68,7 @@ For detailed information about querying the Jaunts database, refer to [API.md](d
 ## Contributing
 
 See [CONTRIBUTING.md](docs/CONTRIBUTING.md) for contribution guidelines.
+
+## Product Wishlist
+
+See [Product Wishlist](https://github.com/gojaunt/jaunt/wiki/Product-Wishlist) for our product wishlist.
