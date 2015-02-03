@@ -145,7 +145,6 @@ angular.module('starter.controllers', [])
       maxWidth: 200,
     });
 
-
     hideMarkers();
 
     Jaunts.selectJaunts(query).then(function(data){
@@ -157,6 +156,7 @@ angular.module('starter.controllers', [])
       $scope.polys = Jaunts.getAllPolys($scope.jaunts);
 
       addToMap($scope.polys);
+
       showMarkers();
       
     });
@@ -193,18 +193,55 @@ angular.module('starter.controllers', [])
             '</div>' /* closes infoW container*/;
 
         var infowindow = new google.maps.InfoWindow({
-            content: contentString
+            content: contentString,
+            pixelOffset: new google.maps.Size(0, -60)
         });
+
+        var iconBase = '/img/jaunty_tiny.png';
 
         var marker = new google.maps.Marker({
             position: new google.maps.LatLng($scope.jaunts[i].start_location.coordinates[1],$scope.jaunts[i].start_location.coordinates[0]),
             map: $scope.map,
-            title: $scope.jaunts[i].meta.title
+            title: $scope.jaunts[i].meta.title,
+            icon: iconBase,
+            animation: google.maps.Animation.DROP
         });
+
         $scope.markers.push(marker);
         $scope.infowindows.push(infowindow);
 
-        infowindow.open($scope.map, marker);
+        // on marker click, animates/stop marker and opens/closes infowindow
+        var currentInnerKey = null;
+
+        google.maps.event.addListener(marker, 'click', (function(innerKey) {
+          return function(event) {
+            if (currentInnerKey !== null) {
+              $scope.markers[currentInnerKey].setAnimation(null);
+              $scope.infowindows[currentInnerKey].close();
+            }
+
+            currentInnerKey = innerKey;
+
+            $scope.markers[innerKey].setAnimation(google.maps.Animation.BOUNCE);
+            $scope.infowindows[innerKey].setPosition(event.latLng);
+            $scope.infowindows[innerKey].open($scope.map);
+          }
+        })(i));
+        
+        // on infowindow close, stop marker animation
+        google.maps.event.addListener(infowindow, 'closeclick', (function(innerKey) {
+          return function(event) {
+            $scope.markers[innerKey].setAnimation(null);
+          }
+        })(i));
+
+        // on map click, stop marker animation and close infoboxes
+        google.maps.event.addListener($scope.map, 'click', (function(innerKey) {
+          return function(event) {
+            $scope.markers[innerKey].setAnimation(null);
+            $scope.infowindows[innerKey].close();
+          }
+        })(i));
     }
   }
 
