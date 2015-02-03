@@ -132,7 +132,7 @@ function Init() {
             name = $('#otherText')[0].value;
           }
           var description = $('#myDescription')[0].value;
-          var photoURL = $('#myURL')[0].value;
+          var photoUrl = $('#myURL')[0].value;
           var tags = $('#myTag')[0].value;
           var duration = $('#myDuration')[0].value;
           
@@ -140,7 +140,7 @@ function Init() {
           var stopInfoObj = {
             name: name,
             description: description,
-            photoURL: photoURL,
+            photoUrl: photoUrl,
             tags: tags,
             duration: duration,
             location: {coordinates:[longitude, latitude]}
