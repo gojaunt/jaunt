@@ -32,7 +32,7 @@
       </div>
 
       <div class="item item-body">
-        <img class="full-image" ng-src="/img/jaunt-logo.png">
+        <img class="full-image" ng-src="{{jaunt.stops[0].photoUrl || '/img/jaunt-logo.png'}}">
         <p>
           Fancy: 
           <span ng-repeat="tag in jaunt.meta.tags">
@@ -45,7 +45,7 @@
       <div class="list">
         <ion-list>
           <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="stop in jaunt.stops" type="item-text-wrap" href="#/tab/jaunts/{{jaunt._id}}/{{stop._id}}">
-            <img ng-src="/img/jaunt-logo.png">
+            <img ng-src="{{stop.image || '/img/jaunt-logo.png'}}">
             <h2>{{stop.name}}</h2>
             <p>{{stop.description}}</p>
             <i class="icon ion-chevron-right icon-accessory"></i>
